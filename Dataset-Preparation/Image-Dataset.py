@@ -1,5 +1,4 @@
 import os
-import numpy as np
 import pandas as pd
 
 def list_files_in_directory(directory_path):
