@@ -7,7 +7,7 @@ def reconstruir_imagem(caminho_csv, indice):
     df = pd.read_csv(caminho_csv)
 
     linha = df.iloc[indice]
-    nome_da_imagem = linha['Nome da Imagem']
+    nome_da_imagem = 'Teste.jpg'
     largura = linha['Largura']
     altura = linha['Altura']
 
@@ -15,9 +15,10 @@ def reconstruir_imagem(caminho_csv, indice):
     imagem_reconstruida = np.array(informacao_pixels, dtype=np.uint8).reshape(altura, largura, 3)
 
     caminho_saida = os.path.join(f"reconstruida_{nome_da_imagem}")
+    print(caminho_saida)
     cv2.imwrite(caminho_saida, imagem_reconstruida)
 
 if __name__ == "__main__":
-    caminho_csv = 'imagens.csv'
-    indice_a_reconstruir = 78  # índice da linha a reconstruir
+    caminho_csv = 'Dataset.csv'
+    indice_a_reconstruir = 1  # índice da linha a reconstruir
     reconstruir_imagem(caminho_csv, indice_a_reconstruir)
