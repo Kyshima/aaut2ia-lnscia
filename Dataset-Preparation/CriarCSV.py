@@ -11,7 +11,8 @@ def obter_informacoes_pixels(imagem):
 
 def processar_imagem(caminho_da_imagem):
     imagem = cv2.imread(caminho_da_imagem)
-    imagem = cv2.resize(imagem, (256, 256))
+    #imagem = cv2.resize(imagem, (256, 256))
+    imagem = cv2.resize(imagem, (128, 128))
     pixels, largura, altura = obter_informacoes_pixels(imagem)
     informacao_pixels = pickle.dumps(pixels)
     return informacao_pixels
@@ -39,7 +40,7 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
     header = True
     for pasta, subpastas, arquivos in os.walk(diretorio_dos_dados):
         print(pasta)
-        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos][:500]
+        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos]
         dados = [df for df in dados if df is not None]
 
         if dados:
@@ -50,7 +51,7 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
             crop_illness_dummies = pd.get_dummies(dados['crop_illness'], prefix='crop_illness', dtype=int)
             dados = pd.concat([crop_dummies, illness_dummies, crop_illness_dummies, dados], axis=1)
             dados = dados.drop(columns=['crop', 'illness', 'crop_illness'])
-            dados.to_csv("DatasetBinary256.csv", mode='a', header=header, index=False)
+            dados.to_csv("DatasetBinary128.csv", mode='a', header=header, index=False)
             header = False
 
 
