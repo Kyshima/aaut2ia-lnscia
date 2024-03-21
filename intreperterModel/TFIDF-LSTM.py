@@ -4,16 +4,16 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.preprocessing import LabelEncoder
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Embedding, LSTM, Dense
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+from keras.models import Sequential
+from keras.layers import Embedding, LSTM, Dense
+from keras.preprocessing.sequence import pad_sequences
 
 if __name__ == "__main__":
-    df = pd.read_csv("output.csv")
+    df = pd.read_csv("new.csv", sep=";")
     # Assuming 'descriptions' is a column in your DataFrame containing the textual descriptions
     X = df['visual_description']
-    y = df['crop']  # Replace 'labels' with the actual column name for your categories
-
+    y = df['crop'].astype(str) + df['disease']  # Replace 'labels' with the actual column name for your categories
+    print(y)
     # Split the data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    model.fit(X_train_padded, y_train, epochs=200, batch_size=50, validation_split=0.3)
+    model.fit(X_train_padded, y_train, epochs=50, batch_size=50, validation_split=0.3)
 
     # Evaluate the model on the test set
     y_pred = model.predict(X_test_padded).argmax(axis=1)

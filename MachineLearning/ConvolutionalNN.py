@@ -19,11 +19,7 @@ label_encoder = LabelEncoder()
 y = label_encoder.fit_transform(y)
 
 # Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Reshape and normalize input images
-#X_train = X_train.reshape(-1, 128, 128, 3).astype('float32') / 255.0
-#X_test = X_test.reshape(-1, 128, 128, 3).astype('float32') / 255.0
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Define the CNN model
 model = models.Sequential([
@@ -66,4 +62,4 @@ print(f'Recall: {recall}')
 print(f'F1 Score: {f1}')
 
 # Save the trained model
-model.save('crop_prediction_model.h5')
+#model.save('crop_prediction_model.h5')

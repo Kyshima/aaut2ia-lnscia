@@ -2,6 +2,7 @@ import os
 import cv2
 import pandas as pd
 import pickle
+from sklearn.preprocessing import LabelEncoder
 
 def obter_informacoes_pixels(imagem):
     altura, largura, _ = imagem.shape
@@ -28,7 +29,7 @@ def criar_dataframe_arquivo(pasta, nome_do_arquivo):
         if count % 100 == 0:
             print(count)
         return pd.DataFrame({
-            'crop': crop_illness.split("___")[1],
+            'crop': crop_illness.split("___")[0],
             'illness': crop_illness.split("___")[-1],
             'crop_illness': crop_illness,
             'Informacao de Pixels': [informacao_pixels],
@@ -38,21 +39,21 @@ def criar_dataframe_arquivo(pasta, nome_do_arquivo):
 
 def criar_csv_com_informacoes(diretorio_dos_dados):
     header = True
+    dadosMaster = []
     for pasta, subpastas, arquivos in os.walk(diretorio_dos_dados):
         print(pasta)
-        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos]
+        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos][:200]
         dados = [df for df in dados if df is not None]
+        dadosMaster = dadosMaster + dados
 
-        if dados:
-            dados = pd.concat(dados, axis=0, ignore_index=True)
-            dados.fillna(0, inplace=True)
-            crop_dummies = pd.get_dummies(dados['crop'], prefix='crop', dtype=int)
-            illness_dummies = pd.get_dummies(dados['illness'], prefix='illness', dtype=int)
-            crop_illness_dummies = pd.get_dummies(dados['crop_illness'], prefix='crop_illness', dtype=int)
-            dados = pd.concat([crop_dummies, illness_dummies, crop_illness_dummies, dados], axis=1)
-            dados = dados.drop(columns=['crop', 'illness', 'crop_illness'])
-            dados.to_csv("DatasetBinary128.csv", mode='a', header=header, index=False)
-            header = False
+    dadosMaster = pd.concat(dadosMaster, axis=0, ignore_index=True)
+    dadosMaster.fillna(0, inplace=True)
+    label_encoder = LabelEncoder()
+    dadosMaster['crop'] = label_encoder.fit_transform(dadosMaster['crop'])
+    dadosMaster['illness'] = label_encoder.fit_transform(dadosMaster['illness'])
+    dadosMaster['crop_illness'] = label_encoder.fit_transform(dadosMaster['crop_illness'])
+    dadosMaster.to_csv("DatasetBinary128.csv", mode='a', header=header, index=False)
+    header = False
 
 
 if __name__ == "__main__":
