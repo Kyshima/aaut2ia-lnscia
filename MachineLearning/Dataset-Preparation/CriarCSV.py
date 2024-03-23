@@ -42,7 +42,7 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
     dadosMaster = []
     for pasta, subpastas, arquivos in os.walk(diretorio_dos_dados):
         print(pasta)
-        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos][:200]
+        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos][:25000]
         dados = [df for df in dados if df is not None]
         dadosMaster = dadosMaster + dados
 
@@ -57,5 +57,5 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
 
 
 if __name__ == "__main__":
-    diretorio_dos_dados = r'DataSet'
+    diretorio_dos_dados = r'C:/Users/Diana/Desktop/DataSet'
     criar_csv_com_informacoes(diretorio_dos_dados)
