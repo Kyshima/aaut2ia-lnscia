@@ -1,9 +1,11 @@
 import pandas as pd
 import numpy as np
+from keras.src.layers import Dropout
+from keras.src.optimizers import Adam
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from keras.models import Sequential
 from keras.layers import Embedding, LSTM, Dense
 from keras.preprocessing.sequence import pad_sequences
@@ -11,46 +13,61 @@ from keras.preprocessing.sequence import pad_sequences
 if __name__ == "__main__":
     df = pd.read_csv("new.csv", sep=";")
     # Assuming 'descriptions' is a column in your DataFrame containing the textual descriptions
-    X = df['visual_description']
+    X_text = df['visual_description']
     y = df['crop'].astype(str) + df['disease']  # Replace 'labels' with the actual column name for your categories
-    print(y)
-    # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    df['formality'].values.reshape(-1, 1)
+
+    # One-hot encode the new categorical feature
+    df['formality'] = df['formality'].fillna("informal")
+    formality = df['formality'].values.reshape(-1, 1)
+    label_encoder = LabelEncoder()
+    formality_encoded = label_encoder.fit_transform(formality)
 
     # TF-IDF Vectorization
     vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
-    X_train_tfidf = vectorizer.fit_transform(X_train).toarray()
-    X_test_tfidf = vectorizer.transform(X_test).toarray()
+    X_tfidf = vectorizer.fit_transform(X_text).toarray()
 
     # Convert TF-IDF matrices to sequences
-    X_train_sequences = [np.where(row > 0)[0] for row in X_train_tfidf]
-    X_test_sequences = [np.where(row > 0)[0] for row in X_test_tfidf]
+    X_sequences = [np.where(row > 0)[0] for row in X_tfidf]
 
     # Pad sequences to have a consistent length
-    max_sequence_length = max(len(seq) for seq in X_train_sequences + X_test_sequences)
-    X_train_padded = pad_sequences(X_train_sequences, maxlen=max_sequence_length)
-    X_test_padded = pad_sequences(X_test_sequences, maxlen=max_sequence_length)
+    max_sequence_length = max(len(seq) for seq in X_sequences)
+    X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
+
+    X = np.hstack((X_padded, formality_encoded.reshape(-1, 1)))
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+
 
     label_encoder = LabelEncoder()
     y_train = label_encoder.fit_transform(y_train)
     y_test = label_encoder.transform(y_test)
 
     # Build LSTM model
-    embedding_dim = 100
     num_classes = len(np.unique(y))
+    epochs = 20
+    batch_size = 64
+    learning_rate = 0.001
+    embedding_dim = 100
+    max_sequence_length = 100
+    dropout_rate = 0.2
+
     model = Sequential()
     model.add(Embedding(input_dim=len(vectorizer.get_feature_names_out()), output_dim=embedding_dim))
-    model.add(LSTM(100))
-    model.add(Dense(num_classes, activation='softmax'))
+    model.add(LSTM(128))
+    model.add(Dropout(dropout_rate))
+    model.add(Dense(units=num_classes, activation='softmax'))
 
     # Compile the model
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    optimizer = Adam(learning_rate=learning_rate)
+    model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    model.fit(X_train_padded, y_train, epochs=50, batch_size=50, validation_split=0.3)
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.1)
 
     # Evaluate the model on the test set
-    y_pred = model.predict(X_test_padded).argmax(axis=1)
+    y_pred = model.predict(X_test).argmax(axis=1)
 
     # Calculate and print additional metrics
     accuracy = accuracy_score(y_test, y_pred)

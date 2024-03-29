@@ -14,20 +14,13 @@ if __name__ == "__main__":
     df = pd.read_csv("new.csv", sep=";")
     # Assuming 'descriptions' is a column in your DataFrame containing the textual descriptions
     X_text = df['visual_description']
-    y = df['crop'].astype(str) + df['disease']
-
+    df['formality'] = df['formality'].fillna("informal")
+    y = df['formality']  # Replace 'labels' with the actual column name for your categories
 
     # Convert string labels to integer labels
     label_encoder = LabelEncoder()
     y = label_encoder.fit_transform(y)
 
-    df['formality'].values.reshape(-1, 1)
-
-    # One-hot encode the new categorical feature
-    df['formality'] = df['formality'].fillna("informal")
-    formality = df['formality'].values.reshape(-1, 1)
-    label_encoder = LabelEncoder()
-    formality_encoded = label_encoder.fit_transform(formality)
 
     # TF-IDF Vectorization
     vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
@@ -40,9 +33,8 @@ if __name__ == "__main__":
     max_sequence_length = max(len(seq) for seq in X_sequences)
     X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
 
-    X = np.hstack((X_padded, formality_encoded.reshape(-1, 1)))
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X_padded, y, test_size=0.3, random_state=42)
 
 
     # Build GRU model

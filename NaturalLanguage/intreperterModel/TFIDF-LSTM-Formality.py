@@ -5,29 +5,17 @@ from keras.src.optimizers import Adam
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from keras.models import Sequential
-from keras.layers import Embedding, GRU, Dense
+from keras.layers import Embedding, LSTM, Dense
 from keras.preprocessing.sequence import pad_sequences
 
 if __name__ == "__main__":
     df = pd.read_csv("new.csv", sep=";")
     # Assuming 'descriptions' is a column in your DataFrame containing the textual descriptions
     X_text = df['visual_description']
-    y = df['crop'].astype(str) + df['disease']
-
-
-    # Convert string labels to integer labels
-    label_encoder = LabelEncoder()
-    y = label_encoder.fit_transform(y)
-
-    df['formality'].values.reshape(-1, 1)
-
-    # One-hot encode the new categorical feature
     df['formality'] = df['formality'].fillna("informal")
-    formality = df['formality'].values.reshape(-1, 1)
-    label_encoder = LabelEncoder()
-    formality_encoded = label_encoder.fit_transform(formality)
+    y = df['formality']  # Replace 'labels' with the actual column name for your categories
 
     # TF-IDF Vectorization
     vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
@@ -40,12 +28,14 @@ if __name__ == "__main__":
     max_sequence_length = max(len(seq) for seq in X_sequences)
     X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
 
-    X = np.hstack((X_padded, formality_encoded.reshape(-1, 1)))
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X_padded, y, test_size=0.4, random_state=42)
 
+    label_encoder = LabelEncoder()
+    y_train = label_encoder.fit_transform(y_train)
+    y_test = label_encoder.transform(y_test)
 
-    # Build GRU model
+    # Build LSTM model
     num_classes = len(np.unique(y))
     epochs = 20
     batch_size = 64
@@ -54,14 +44,11 @@ if __name__ == "__main__":
     max_sequence_length = 100
     dropout_rate = 0.2
 
-    # Compile the model
-    embedding_dim = 100
-    num_classes = len(np.unique(y))
     model = Sequential()
     model.add(Embedding(input_dim=len(vectorizer.get_feature_names_out()), output_dim=embedding_dim))
-    model.add(GRU(100))
+    model.add(LSTM(128))
     model.add(Dropout(dropout_rate))
-    model.add(Dense(num_classes, activation='softmax'))
+    model.add(Dense(units=num_classes, activation='softmax'))
 
     # Compile the model
     optimizer = Adam(learning_rate=learning_rate)
