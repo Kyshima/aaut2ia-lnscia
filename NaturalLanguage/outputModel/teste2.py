@@ -7,8 +7,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 
 
-
-df = pd.read_csv("NaturalLanguage/intreperterModel/new.csv", sep=";")
+df = pd.read_csv("NaturalLanguage/outputModel/preprocessed_dataset.csv")
 
 max_words = 1000  # Maximum number of words to keep
 max_len = 100  # Maximum length of sequences
@@ -34,14 +33,14 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 model.fit(X, y_encoded, epochs=10, batch_size=32)
 
 def generate_description(illness):
-    description = ""
     # Tokenize and pad the input
     sequence = tokenizer.texts_to_sequences([illness])
     padded_sequence = pad_sequences(sequence, maxlen=max_len)
     # Generate text
     predicted_index = np.argmax(model.predict(padded_sequence), axis=-1)[0]
-    description = df.iloc[predicted_index]['treatment']
-    return description
+    # Reverse encoding to get the actual disease label
+    predicted_disease = label_encoder.inverse_transform([predicted_index])[0]
+    return predicted_disease
 
 generated_description = generate_description('Brown Spot')
 print(generated_description)
