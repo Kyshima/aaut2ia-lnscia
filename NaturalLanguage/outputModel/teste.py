@@ -1,77 +1,185 @@
-import pandas as pd
 import numpy as np
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Embedding  # Importing Embedding layer
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+import random
+import pandas as pd
+import pickle
+import re
+from keras.models import Sequential
+from keras.layers import Dense, LSTM, Activation
+from keras.callbacks import LambdaCallback
+import sys
+from utils import *
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.multiclass import OneVsRestClassifier
+import os
 
 
-df = pd.read_csv("NaturalLanguage/intreperterModel/new.csv", sep=";")
 
-# Sample text data
-text_data = """
-This is a sample text data for training a simple RNN-based text generator. 
-You can replace it with your own text data for better results.
-"""
+'''--------------------------------- Intent recgonizer ---------------------------------'''
+'''
+df = pd.read_csv("NaturalLanguage/outputModel/new.csv", sep=";")
+dialogue_df = pd.read_csv('NaturalLanguage/outputModel/data/dialogues.tsv', sep='\t').sample(1495, random_state=0)
 
-X_text = df['treatment']
+dialogue_df.head()
+dialogue_df['text'] = dialogue_df['text'].apply(text_prepare)
+df['treatment'] = df['treatment'].apply(text_prepare)
 
-# Tokenization
-tokenizer = Tokenizer()
-tokenizer.fit_on_texts(X_text)
-total_words = len(tokenizer.word_index) + 1
+X = np.concatenate([dialogue_df['text'].values, df['treatment'].values])
+y = ['dialogue'] * dialogue_df.shape[0] + ['treatment'] * df.shape[0]
 
-# Creating input sequences
-input_sequences = []
-for line in X_text:
-    token_list = tokenizer.texts_to_sequences([line])[0]
-    for i in range(1, len(token_list)):
-        n_gram_sequence = token_list[:i + 1]
-        input_sequences.append(n_gram_sequence)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=0) # test_size proportion 1:9
+print('Train size = {}, test size = {}'.format(len(X_train), len(X_test)))
 
-# Padding sequences
-max_sequence_len = max([len(x) for x in input_sequences])
-input_sequences = np.array(pad_sequences(input_sequences, maxlen=max_sequence_len, padding='pre'))
+X_train_tfidf, X_test_tfidf = tfidf_features(X_train, X_test, RESOURCE_PATH['TFIDF_VECTORIZER'])
 
-# Creating predictors and labels
-predictors, label = input_sequences[:, :-1], input_sequences[:, -1]
+intent_recognizer = LogisticRegression(solver='lbfgs',penalty='l2',C=10,random_state=0,max_iter=400).fit(X_train_tfidf, y_train)
 
-# One-hot encoding labels
-label = tf.keras.utils.to_categorical(label, num_classes=total_words)
+# Check test accuracy.
+y_test_pred = intent_recognizer.predict(X_test_tfidf)
+test_accuracy = accuracy_score(y_test, y_test_pred)
+print('Test accuracy = {}'.format(test_accuracy)) #acc = 0.9966555183946488
 
-# Building the model
+# Dump do classificador para depois usar no Bot
+pickle.dump(intent_recognizer, open(RESOURCE_PATH['INTENT_RECOGNIZER'], 'wb'))
+'''
+'''--------------------------------- Intent recgonizer ---------------------------------'''
+
+'''--------------------------------- Tag Classifier ---------------------------------'''
+'''
+X = df['treatment'].values
+y = df['disease'].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+print('Train size = {}, test size = {}'.format(len(X_train), len(X_test)))
+
+vectorizer = pickle.load(open(RESOURCE_PATH['TFIDF_VECTORIZER'], 'rb'))
+
+X_train_tfidf, X_test_tfidf = vectorizer.transform(X_train), vectorizer.transform(X_test)
+
+tag_classifier = OneVsRestClassifier(LogisticRegression(solver='lbfgs',penalty='l2',C=5,random_state=0,max_iter=400)).fit(X_train_tfidf, y_train)
+
+# Check test accuracy.
+y_test_pred = tag_classifier.predict(X_test_tfidf)
+test_accuracy = accuracy_score(y_test, y_test_pred)
+print('Test accuracy = {}'.format(test_accuracy))
+
+# Dump do classificador para depois usar no Bot
+pickle.dump(tag_classifier, open(RESOURCE_PATH['TAG_CLASSIFIER'], 'wb'))
+'''
+
+'''--------------------------------- Tag Classifier ---------------------------------'''
+
+'''--------------------------------- Rank com embeddings (temos de analisar) ---------------------------------'''
+'''
+counts_by_tag = df.groupby(by=['crop', 'disease'])['treatment'].count()
+print(counts_by_tag)
+
+os.makedirs(RESOURCE_PATH['THREAD_EMBEDDINGS_FOLDER'], exist_ok=True)
+
+for crop, disease, count in counts_by_tag.items():
+    tag_treatment = df[df['disease'] == disease]
+
+    tag_post_ids = tag_treatment['treatment'].tolist()
+
+    tag_vectors = np.zeros((count, embeddings_dim), dtype=np.float32)
+    for i, title in enumerate(tag_treatment['treatment']):
+        tag_vectors[i, :] = question_to_vec(title, starspace_embeddings, embeddings_dim)
+
+    # Dump post ids and vectors to a file.
+    filename = os.path.join(RESOURCE_PATH['THREAD_EMBEDDINGS_FOLDER'], os.path.normpath('%s.pkl' % disease))
+    pickle.dump((tag_post_ids, tag_vectors), open(filename, 'wb'))
+'''
+'''--------------------------------- Rank com embeddings (temos de analisar) ---------------------------------'''
+
+
+df = pd.read_csv("NaturalLanguage/outputModel/new.csv", sep=";")
+
+testOneDisease = df[df['disease'] == 'Common Rust']['treatment'].apply(text_prepare)
+print(testOneDisease)
+
+# Extract text from the 'treatment' column
+text = ' '.join(df['treatment'].apply(text_prepare).astype(str))
+
+# Create character-level mappings
+chars = sorted(list(set(text)))
+char_indices = dict((c, i) for i, c in enumerate(chars))
+indices_char = dict((i, c) for i, c in enumerate(chars))
+print(indices_char)
+
+
+# Create training data
+maxlen = 40
+step = 3
+sentences = []
+next_chars = []
+for x in testOneDisease:
+    for i in range(0, len(x) - maxlen, step):
+        sentences.append(x[i: i + maxlen])
+        next_chars.append(x[i + maxlen])
+    x = np.zeros((len(sentences), maxlen, len(chars)), dtype=bool)
+    y = np.zeros((len(sentences), len(chars)), dtype=bool)
+    for i, sentence in enumerate(sentences):
+        for t, char in enumerate(sentence):
+            x[i, t, char_indices[char]] = 1
+        y[i, char_indices[next_chars[i]]] = 1
+
+#print(x)
+#print(next_chars)
+
+
+# Define the RNN model
 model = Sequential()
-model.add(Embedding(total_words, 100))
-model.add(LSTM(150, return_sequences=True))
-model.add(LSTM(150))
-model.add(Dense(total_words, activation='softmax'))
+model.add(LSTM(128, input_shape=(maxlen, len(chars))))
+model.add(Dense(len(chars)))
+model.add(Activation('softmax'))
 
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+# Compile the model
+model.compile(loss='categorical_crossentropy', optimizer='adam')
 
-# Training the model
-model.fit(predictors, label, epochs=20, verbose=1)
-
+# Function to sample the next character
+def sample(preds, temperature=1.0):
+    preds = np.asarray(preds).astype('float64')
+    preds = np.log(preds) / temperature
+    exp_preds = np.exp(preds)
+    preds = exp_preds / np.sum(exp_preds)
+    probas = np.random.multinomial(1, preds, 1)
+    return np.argmax(probas)
 
 # Function to generate text
-def generate_text(seed_text, next_words, model, max_sequence_len):
-    for _ in range(next_words):
-        token_list = tokenizer.texts_to_sequences([seed_text])[0]
-        token_list = pad_sequences([token_list], maxlen=max_sequence_len - 1, padding='pre')
-        predicted = model.predict_step(token_list)
+def on_epoch_end(epoch, _):
+    if epoch == 58:
+        print()
+        print('----- Generating text after Epoch: %d' % epoch)
+        start_index = random.randint(0, len(testOneDisease) - maxlen - 1)
+        for diversity in [0.2, 0.5, 1.0, 1.2]:
+            print('----- diversity:', diversity)
 
-        # Instead of direct comparison, we need to find the index of the maximum value
-        predicted_index = np.argmax(predicted)
+            generated = ''
+            sentence = testOneDisease[start_index][:maxlen]
+            generated += sentence
+            print('----- Generating with seed: "' + sentence + '"')
+            sys.stdout.write(generated)
 
-        output_word = ""
-        for word, index in tokenizer.word_index.items():
-            if index == predicted_index:
-                output_word = word
-                break
-        seed_text = output_word
-    return seed_text
+            for i in range(400):
+                x_pred = np.zeros((1, maxlen, len(chars)))
+                for t, char in enumerate(sentence):
+                    x_pred[0, t, char_indices[char]] = 1.
 
+                preds = model.predict(x_pred, verbose=0)[0]
+                next_index = sample(preds, diversity)
+                next_char = indices_char[next_index]
 
-# Example usage
-generated_text = generate_text("Hit 'em with", max_sequence_len, model, max_sequence_len)
-print(generated_text)
+                generated += next_char
+                sentence = sentence[1:] + next_char
+
+                sys.stdout.write(next_char)
+                sys.stdout.flush()
+            print()
+
+# Callback to generate text after each epoch
+print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
+
+# Train the model
+model.fit(x, y, batch_size=128, epochs=60, callbacks=[print_callback])
+

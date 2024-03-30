@@ -2,3 +2,6 @@ Dataset-Preparation/DataSet/
 Dataset-Preparation/DatasetBinary256.csv
 Dataset-Preparation/DatasetBinary128.csv
 MachineLearning/NeuralNetwork/DatasetBinary128.csv
+NaturalLanguage/outputModel/data/
+NaturalLanguage/outputModel/chatterbot_corpus/
+NaturalLanguage/outputModel/new.csv
