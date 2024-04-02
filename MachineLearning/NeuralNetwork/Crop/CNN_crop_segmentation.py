@@ -15,7 +15,7 @@ def decode_image(pickled_data):
 
 random.seed(100)
 
-dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/DatasetBinary128.csv")
+dataset = pd.read_csv("C:/Users/didi2/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
 
 X = np.array([decode_image(data) for data in dataset['Informacao de Pixels']])
 X = X / 255.0 
@@ -24,32 +24,30 @@ X = X.reshape(X.shape[0], 128, 128, 3)
 label_encoder = LabelEncoder()
 y = label_encoder.fit_transform(dataset['crop'])
 
-train_images, test_images, train_labels, test_labels = train_test_split(X, y, test_size=0.3, random_state=42)
+train_images, test_images, train_masks, test_masks = train_test_split(X, y, test_size=0.3, random_state=42)
 
-train_masks = np.expand_dims(train_labels, axis=-1)
-test_masks = np.expand_dims(test_labels, axis=-1)
+train_masks = np.expand_dims(train_masks, axis=-1)
+test_masks = np.expand_dims(test_masks, axis=-1)
 
 inputs = keras.layers.Input((128, 128, 3))
 
 # Encoder
 conv1 = keras.layers.Conv2D(32, (3, 3), activation='relu', padding='same')(inputs)
 conv1 = keras.layers.Conv2D(32, (3, 3), activation='relu', padding='same')(conv1)
-pool1 = keras.layers.MaxPooling2D(pool_size=(2, 2))(conv1)
-
-conv2 = keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same')(pool1)
+conv2 = keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same')(conv1)
 conv2 = keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same')(conv2)
-pool2 = keras.layers.MaxPooling2D(pool_size=(2, 2))(conv2)
+
+# Bottleneck
+conv3 = keras.layers.Conv2D(128, (3, 3), activation='relu', padding='same')(conv2)
+conv3 = keras.layers.Conv2D(128, (3, 3), activation='relu', padding='same')(conv3)
 
 # Decoder
-conv3 = keras.layers.Conv2D(128, (3, 3), activation='relu', padding='same')(pool2)
-conv3 = keras.layers.Conv2D(128, (3, 3), activation='relu', padding='same')(conv3)
-up1 = keras.layers.UpSampling2D((2, 2))(conv3)
-
+up1 = keras.layers.Conv2DTranspose(64, (2, 2), strides=(2, 2), padding='same')(conv3)
 merge1 = keras.layers.concatenate([conv2, up1], axis=-1)
 conv4 = keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same')(merge1)
 conv4 = keras.layers.Conv2D(64, (3, 3), activation='relu', padding='same')(conv4)
-up2 = keras.layers.UpSampling2D((2, 2))(conv4)
 
+up2 = keras.layers.Conv2DTranspose(32, (2, 2), strides=(2, 2), padding='same')(conv4)
 merge2 = keras.layers.concatenate([conv1, up2], axis=-1)
 conv5 = keras.layers.Conv2D(32, (3, 3), activation='relu', padding='same')(merge2)
 conv5 = keras.layers.Conv2D(32, (3, 3), activation='relu', padding='same')(conv5)
@@ -78,6 +76,3 @@ f1 = f1_score(test_masks.flatten(), binary_predictions.flatten())
 print(f'Precision: {precision}')
 print(f'Recall: {recall}')
 print(f'F1 Score: {f1}')
-
-print("Sample prediction:", binary_predictions[0])
-print("True mask:", test_masks[0])

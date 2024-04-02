@@ -10,10 +10,11 @@ import pickle
 import random
 import keras_tuner
 from kerastuner.tuners import RandomSearch
+from kerastuner import HyperParameters
 
 random.seed(100)
 
-dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/DatasetBinary128.csv")
+dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
 
 def decode_image(pickled_data):
     image_array = pickle.loads(eval(pickled_data))
@@ -63,7 +64,7 @@ tuner = RandomSearch(
     build_model,
     objective='val_accuracy',
     max_trials=10,  # Number of hyperparameter combinations to try
-    directory='C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/HyperparametersTests/cnn_crop_classification_hyper',  # Directory to store the tuning results
+    directory='C:/Users/didi2/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/HyperparametersTests/cnn_crop_classification_hyper',  # Directory to store the tuning results
     project_name='cnn_hyperparameter_tuning'  # Name of the tuning project
 )
 
@@ -77,7 +78,7 @@ best_model = tuner.get_best_models(num_models=1)[0]
 best_hyperparameters = tuner.get_best_hyperparameters(num_trials=1)[0]
 
 print("Best Hyperparameters:")
-print(best_hyperparameters)
+print(best_hyperparameters.values)
 
 test_loss, test_acc = best_model.evaluate(test_images, test_labels, verbose=2)
 print('\nAccuracy:', test_acc)
