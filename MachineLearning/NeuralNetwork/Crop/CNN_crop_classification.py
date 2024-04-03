@@ -9,8 +9,7 @@ from PIL import Image
 import pickle
 import random
 import keras_tuner
-from kerastuner.tuners import RandomSearch
-from kerastuner import HyperParameters
+from keras_tuner.tuners import RandomSearch
 
 random.seed(100)
 
@@ -31,7 +30,8 @@ train_images, test_images, train_labels, test_labels = train_test_split(X, y, te
 
 def build_model(hp):
     model = keras.Sequential()
-    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu', input_shape=(128, 128, 3)))
+    model.add(keras.layers.Input(shape=(128, 128, 3)))
+    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
     model.add(keras.layers.MaxPooling2D((2, 2)))
     model.add(keras.layers.Conv2D(hp.Int('conv2_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
     model.add(keras.layers.MaxPooling2D((2, 2)))
@@ -64,7 +64,7 @@ tuner = RandomSearch(
     build_model,
     objective='val_accuracy',
     max_trials=10,  # Number of hyperparameter combinations to try
-    directory='C:/Users/didi2/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/HyperparametersTests/cnn_crop_classification_hyper',  # Directory to store the tuning results
+    directory='C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/HyperparametersTests/cnn_crop_classification_hyper',  # Directory to store the tuning results
     project_name='cnn_hyperparameter_tuning'  # Name of the tuning project
 )
 

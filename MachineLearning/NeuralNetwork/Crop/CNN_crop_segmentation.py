@@ -15,7 +15,7 @@ def decode_image(pickled_data):
 
 random.seed(100)
 
-dataset = pd.read_csv("C:/Users/didi2/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
+dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
 
 X = np.array([decode_image(data) for data in dataset['Informacao de Pixels']])
 X = X / 255.0 
