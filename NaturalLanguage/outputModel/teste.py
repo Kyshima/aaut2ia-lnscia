@@ -13,8 +13,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.multiclass import OneVsRestClassifier
 import os
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from keras.preprocessing.sequence import pad_sequences
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
-
+pd.set_option('display.max_colwidth', None)
 
 '''--------------------------------- Intent recgonizer ---------------------------------'''
 '''
@@ -92,12 +96,93 @@ for crop, disease, count in counts_by_tag.items():
 '''
 '''--------------------------------- Rank com embeddings (temos de analisar) ---------------------------------'''
 
+pd.set_option('display.max_colwidth', None)
+df = pd.read_csv("new.csv", sep=";")
 
-df = pd.read_csv("NaturalLanguage/outputModel/new.csv", sep=";")
+testOneDisease = "cropcommonrust " + df[df['disease'] == 'Common Rust']['treatment'].apply(text_prepare) + " EOF"
 
-testOneDisease = df[df['disease'] == 'Common Rust']['treatment'].apply(text_prepare)
-print(testOneDisease)
+def expand_description(df):
+    expanded_data = []
+    for index, row in df.iterrows():
+        words = row['description'].split()
+        leading_words = ''
+        for i in range(len(words) - 1):
+            leading_words += ' ' + words[i]
+            expanded_data.append([leading_words.strip(), words[i+1]])
+    expanded_df = pd.DataFrame(expanded_data, columns=['Leading Words', 'Next Word'])
+    return expanded_df
 
+expanded_df = expand_description(testOneDisease.to_frame(name="description"))
+
+
+X_text = expanded_df['Leading Words']
+y = expanded_df['Next Word']  # Replace 'labels' with the actual column name for your categories
+
+# TF-IDF Vectorization
+vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
+X_tfidf = vectorizer.fit_transform(X_text).toarray()
+
+# Convert TF-IDF matrices to sequences
+X_sequences = [np.where(row > 0)[0] for row in X_tfidf]
+
+# Pad sequences to have a consistent length
+max_sequence_length = max(len(seq) for seq in X_sequences)
+X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
+
+label_encoder = LabelEncoder()
+y_train = label_encoder.fit_transform(y)
+
+X_padded = np.reshape(X_padded, (X_padded.shape[0], X_padded.shape[1], 1))
+
+# Define the RNN model
+model = Sequential()
+model.add(LSTM(128))
+model.add(Dense(len(np.unique(y))))
+model.add(Activation('softmax'))
+
+# Compile the model
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+
+# Function to generate text
+def on_epoch_end(epoch, _):
+    if epoch == 58:
+        print()
+        print('----- Generating text after Epoch: %d' % epoch)
+        #start_index = random.randint(0, len(testOneDisease) - maxlen - 1)
+        for diversity in [0.2, 0.5, 1.0, 1.2]:
+            print('----- diversity:', diversity)
+
+            generated = ''
+            sentence = "cropcommonrust"
+            generated += sentence
+            print('----- Generating with seed: "' + sentence + '"')
+            sys.stdout.write(generated)
+
+            while True or len(generated) < 100:
+                vectTest = vectorizer.transform([generated]).toarray()
+                vectTest_sequences = [np.where(row > 0)[0] for row in vectTest]
+
+                # Pad sequences to have a consistent length
+                vectTest_padded = pad_sequences(vectTest_sequences, maxlen=max_sequence_length)
+                print(vectTest_padded)
+
+                nextChar = model.predict(vectTest_padded).argmax(axis=1)
+                print(nextChar)
+                nextWord = label_encoder.inverse_transform(nextChar)[0]
+                generated += " " + nextWord
+                print(generated)
+                if nextChar == "EOF":
+                    break
+
+# Callback to generate text after each epoch
+print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
+
+
+# Train the model
+model.fit(X_padded, y_train, batch_size=128, epochs=60, callbacks=[print_callback])
+
+'''
 # Extract text from the 'treatment' column
 text = ' '.join(df['treatment'].apply(text_prepare).astype(str))
 
@@ -182,4 +267,4 @@ print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
 # Train the model
 model.fit(x, y, batch_size=128, epochs=60, callbacks=[print_callback])
-
+'''

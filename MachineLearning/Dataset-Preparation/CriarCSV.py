@@ -57,5 +57,5 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
 
 
 if __name__ == "__main__":
-    diretorio_dos_dados = r'C:/Users/Diana/Desktop/DataSet'
+    diretorio_dos_dados = r'D:/Faculdade/Mestrado/semestre2/projeto1'
     criar_csv_com_informacoes(diretorio_dos_dados)
