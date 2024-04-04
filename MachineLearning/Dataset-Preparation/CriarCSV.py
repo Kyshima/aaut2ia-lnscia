@@ -1,19 +1,32 @@
 import os
-import cv2
+from PIL import Image, ImageEnhance, ImageFilter
+import numpy as np
 import pandas as pd
 import pickle
 from sklearn.preprocessing import LabelEncoder
 
 def obter_informacoes_pixels(imagem):
-    altura, largura, _ = imagem.shape
-    pixels = imagem.reshape(-1, 3)
+    largura, altura = imagem.size
+    pixels = np.array(imagem.getdata())
     return pixels, largura, altura
 
-
 def processar_imagem(caminho_da_imagem):
-    imagem = cv2.imread(caminho_da_imagem)
-    #imagem = cv2.resize(imagem, (256, 256))
-    imagem = cv2.resize(imagem, (128, 128))
+    imagem = Image.open(caminho_da_imagem)
+    color_enhancer = ImageEnhance.Color(imagem)
+    image = color_enhancer.enhance(10)  # Increase color intensity
+
+    image_rgb = image.convert("RGB")
+
+    # Separate the channels
+    r, g, b = image_rgb.split()
+
+    # Reduce the strength of the green channel
+    factor = 0.7  # Adjust this factor as needed (0.5 reduces intensity by half)
+    g_less_strong = g.point(lambda x: int(x * factor))
+
+    # Recombine the channels into an image
+    imagem = Image.merge("RGB", (r, g_less_strong, b))
+    imagem = imagem.resize((128, 128))
     pixels, largura, altura = obter_informacoes_pixels(imagem)
     informacao_pixels = pickle.dumps(pixels)
     return informacao_pixels
@@ -57,5 +70,5 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
 
 
 if __name__ == "__main__":
-    diretorio_dos_dados = r'C:/Users/Diana/Desktop/Dataset'
+    diretorio_dos_dados = r'C:/Users/cerd2/OneDrive/Documentos/aaut2ia-lnscia/Dataset-Preparation/Dataset'
     criar_csv_com_informacoes(diretorio_dos_dados)
