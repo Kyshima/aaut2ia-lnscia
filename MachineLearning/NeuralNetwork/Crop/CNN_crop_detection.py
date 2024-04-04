@@ -31,7 +31,6 @@ def build_model(hp):
     input_shape = (128, 128, 3)  # Input shape of your images
     num_classes = 4  # Number of classes (crop types) to predict
 
-    # Backbone CNN (VGG16)
     backbone = tf.keras.applications.VGG16(input_shape=input_shape, include_top=False)
     backbone.trainable = False
 

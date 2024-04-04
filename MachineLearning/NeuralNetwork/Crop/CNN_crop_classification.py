@@ -13,7 +13,7 @@ from keras_tuner.tuners import RandomSearch
 
 random.seed(100)
 
-dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
+dataset = pd.read_csv("C:/Users/didi2/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
 
 def decode_image(pickled_data):
     image_array = pickle.loads(eval(pickled_data))
@@ -22,6 +22,7 @@ def decode_image(pickled_data):
 
 X = np.array([decode_image(data) for data in dataset['Informacao de Pixels']])
 X = X.reshape(X.shape[0], 128, 128, 3)
+X = X / 255.00
 
 label_encoder = LabelEncoder()
 y = label_encoder.fit_transform(dataset['crop'])
@@ -46,7 +47,7 @@ def build_model(hp):
     return model
 
 Model_Checkpoint = tf.keras.callbacks.ModelCheckpoint(
-    'C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/cnn_crop_classification.keras',
+    'C:/Users/didi2/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/cnn_crop_classification.keras',
     monitor='val_loss', 
     save_best_only='True',
     verbose=1
@@ -64,7 +65,7 @@ tuner = RandomSearch(
     build_model,
     objective='val_accuracy',
     max_trials=10,  # Number of hyperparameter combinations to try
-    directory='C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/HyperparametersTests/cnn_crop_classification_hyper',  # Directory to store the tuning results
+    directory='C:/Users/didi2/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/HyperparametersTests/cnn_crop_classification_hyper',  # Directory to store the tuning results
     project_name='cnn_hyperparameter_tuning'  # Name of the tuning project
 )
 
