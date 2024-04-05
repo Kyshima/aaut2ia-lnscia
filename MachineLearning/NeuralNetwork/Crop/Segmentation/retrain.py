@@ -4,7 +4,7 @@ import pickle
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import layers, models
 from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras import regularizers
+from tensorflow.keras.optimizers import Adam
 
 print('Estou a carregarzinho o csvzinho...')
 
@@ -34,50 +34,41 @@ X_test = X_test / 255.0
 X_train_resized = np.array([np.reshape(sample, (128, 128, 3)) for sample in X_train])
 X_test_resized = np.array([np.reshape(sample, (128, 128, 3)) for sample in X_test])
 
-# Definir a arquitetura da CNN para classificação multiclasse
-model = models.Sequential([
-    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(128, 128, 3)),
-    layers.MaxPooling2D((2, 2)),
-    layers.Conv2D(64, (3, 3), activation='relu'),
-    layers.MaxPooling2D((2, 2)),
-    layers.Conv2D(128, (3, 3), activation='relu'),
-    layers.MaxPooling2D((2, 2)),
-    layers.Conv2D(256, (3, 3), activation='relu'),
-    layers.MaxPooling2D((2, 2)),
-    layers.Flatten(),
-    layers.Dropout(0.5),
-    layers.Dense(512, activation='relu'),
-    layers.Dropout(0.5),
-    layers.Dense(256, activation='relu'),
-    layers.Dense(4, activation='softmax')  # Saída com quatro neurônios e função de ativação softmax
-])
+# Carregar a arquitetura do modelo a partir do arquivo JSON
+with open("model_architecture.json", "r") as json_file:
+    model_json = json_file.read()
+
+# Construir o modelo a partir da arquitetura carregada
+model = models.model_from_json(model_json)
+
+# Carregar os pesos do modelo
+model.load_weights("model_checkpoint.weights.h5")
 
 # Compilar o modelo
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
+model.compile(
+              #optimizer='adamW',
+              loss='binary_crossentropy',
               metrics=['accuracy'])
+
+# Salvar a arquitetura do modelo (apenas uma vez)
+with open("model_architecture.json", "w") as json_file:
+    json_file.write(model_json)
 
 # Definir o caminho para salvar os pesos do modelo
 checkpoint_path = "model_checkpoint.weights.h5"
 
-# Definir o callback para salvar os pesos do modelo
+# Definir o callback para salvar os pesos do modelo com base na perda de validação ('val_loss')
 checkpoint_callback = ModelCheckpoint(filepath=checkpoint_path,
                                       save_weights_only=True,
                                       save_best_only=True,
-                                      monitor='val_accuracy',
-                                      mode='max',
+                                      monitor='val_loss',  # Monitorar a perda de validação
+                                      mode='min',          # Salvar o modelo quando a perda de validação diminuir
                                       verbose=1)
 
-# Treinar o modelo com o callback
+# Retomar o treinamento do modelo
 model.fit(X_train_resized, y_crop_train,
-          epochs=20,
+          epochs=10,
           batch_size=128,
           verbose=1,
           validation_data=(X_test_resized, y_crop_test),
           callbacks=[checkpoint_callback])
-
-# Salvar a arquitetura do modelo
-model_json = model.to_json()
-with open("model_architecture.json", "w") as json_file:
-    json_file.write(model_json)
-

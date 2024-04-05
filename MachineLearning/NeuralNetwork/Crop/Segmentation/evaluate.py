@@ -15,7 +15,7 @@ data['Informacao de Pixels'] = data.apply(load_pickle_data, axis=1)
 
 # Dividir dados em recursos (features) e rótulos (labels)
 X = np.array(data["Informacao de Pixels"])  # Recursos
-y_crop = np.array(data["illness"])  # Rótulo "illness"
+y_crop = np.array(data["crop"])  # Rótulo "crop"
 
 # Normalizar os dados de entrada
 X = X / 255.0
@@ -34,16 +34,17 @@ model.load_weights("model_checkpoint.weights.h5")
 
 # Realizar previsões
 predictions = model.predict(X_resized)
-predictions = (predictions > 0.5)  # Converte as probabilidades em previsões binárias
+predictions = (predictions > 0.5).astype(np.uint8)  # Converte as probabilidades em previsões binárias
 
 # Calcular métricas de avaliação
-accuracy = accuracy_score(y_crop, predictions)
-#precision = precision_score(y_crop, predictions, average='binary')
-#recall = recall_score(y_crop, predictions, average='binary')
-#f1 = f1_score(y_crop, predictions, average='binary')
+accuracy = accuracy_score(y_crop, np.argmax(predictions, axis=1))
+precision = precision_score(y_crop, np.argmax(predictions, axis=1), average='weighted')
+recall = recall_score(y_crop, np.argmax(predictions, axis=1), average='weighted')
+f1 = f1_score(y_crop, np.argmax(predictions, axis=1), average='weighted')
+
 
 # Imprimir métricas de avaliação
 print("Accuracy:", accuracy)
-#print("Precision:", precision)
-#print("Recall:", recall)
-#print("F1 Score:", f1)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
