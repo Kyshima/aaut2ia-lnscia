@@ -1,22 +1,23 @@
 import tensorflow as tf
 from tensorflow import keras
+from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import precision_score, recall_score, f1_score
+from PIL import Image
 import pickle
 import random
-import keras_tuner
-from kerastuner.tuners import RandomSearch
+from keras_tuner.tuners import RandomSearch
 
 random.seed(100)
 
-dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/DatasetBinary128.csv")
+dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
 
 def decode_image(pickled_data):
     image_array = pickle.loads(eval(pickled_data))
-    return np.array(image_array)
+    image = Image.fromarray(image_array)
+    return np.array(image)
 
 X = np.array([decode_image(data) for data in dataset['Informacao de Pixels']])
 X = X.reshape(X.shape[0], 128, 128, 3)
@@ -24,23 +25,30 @@ X = X.reshape(X.shape[0], 128, 128, 3)
 label_encoder = LabelEncoder()
 y = label_encoder.fit_transform(dataset['crop'])
 
-train_images, test_images, train_labels, test_labels = train_test_split(X, y, test_size=0.3, random_state=42)
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 def build_model(hp):
-    model = keras.Sequential()
-    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu', input_shape=(128, 128, 3)))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv2_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv3_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(hp.Int('dense_units', min_value=64, max_value=256, step=64), activation='relu'))
-    model.add(keras.layers.Dense(1, activation='sigmoid'))
+    input_shape = (128, 128, 3)  # Input shape of your images
+    num_classes = 4  # Number of classes (crop types) to predict
 
-    model.compile(loss='binary_crossentropy',
-                  metrics=['accuracy'],
-                  optimizer=tf.keras.optimizers.Adam(learning_rate=1e-5))
+    backbone = tf.keras.applications.VGG16(input_shape=input_shape, include_top=False)
+    backbone.trainable = False
+
+    # Additional layers for object detection
+    x = keras.layers.Flatten()(backbone.output)
+    x = keras.layers.Dense(256, activation='relu')(x)
+    x = keras.layers.Dropout(0.5)(x)
+    x = keras.layers.Dense(4*num_classes, activation='sigmoid')(x)  # 4*num_classes for bounding box coordinates and class probabilities
+    outputs = keras.layers.Reshape((num_classes, 4))(x)  # Reshape to separate bounding box coordinates and class probabilities
+
+    # Define the model
+    model = keras.models.Model(inputs=backbone.input, outputs=outputs)
+
+    # Compile the model
+    model.compile(optimizer='adam',
+                  loss='mse',  # Mean squared error loss for bounding box regression
+                  metrics=['accuracy'])
+
     return model
 
 Model_Checkpoint = tf.keras.callbacks.ModelCheckpoint(
@@ -66,9 +74,9 @@ tuner = RandomSearch(
     project_name='crop_hyperparameter_tuning'  # Name of the tuning project
 )
 
-tuner.search(train_images, train_labels,
+tuner.search(x_train, y_train,
              epochs=10,
-             validation_data=(test_images, test_labels),
+             validation_data=(x_test, y_test),
              callbacks=[Model_Checkpoint, Early_Stopping])
 
 best_model = tuner.get_best_models(num_models=1)[0]
@@ -76,17 +84,17 @@ best_model = tuner.get_best_models(num_models=1)[0]
 best_hyperparameters = tuner.get_best_hyperparameters(num_trials=1)[0]
 
 print("Best Hyperparameters:")
-print(best_hyperparameters)
+print(best_hyperparameters.values)
 
-test_loss, test_acc = best_model.evaluate(test_images, test_labels, verbose=2)
+test_loss, test_acc = best_model.evaluate(x_test, y_test, verbose=2)
 print('\nAccuracy:', test_acc)
 
-predictions = best_model.predict(test_images)
+predictions = best_model.predict(x_test)
 binary_predictions = (predictions > 0.5).astype("int32")
 
-precision = precision_score(test_labels, binary_predictions, average='weighted')
-recall = recall_score(test_labels, binary_predictions, average='weighted')
-f1 = f1_score(test_labels, binary_predictions, average='weighted')
+precision = precision_score(y_test, binary_predictions, average='weighted')
+recall = recall_score(y_test, binary_predictions, average='weighted')
+f1 = f1_score(y_test, binary_predictions, average='weighted')
 
 print(f'Precision: {precision}')
 print(f'Recall: {recall}')
