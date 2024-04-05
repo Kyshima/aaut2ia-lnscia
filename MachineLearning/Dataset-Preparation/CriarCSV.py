@@ -70,5 +70,5 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
 
 
 if __name__ == "__main__":
-    diretorio_dos_dados = r'C:/Users/cerd2/OneDrive/Documentos/aaut2ia-lnscia/Dataset-Preparation/Dataset'
+    diretorio_dos_dados = r'C:/Users/Patricia/Documents/GitHub/aaut2ia-lnscia/Dataset'
     criar_csv_com_informacoes(diretorio_dos_dados)
