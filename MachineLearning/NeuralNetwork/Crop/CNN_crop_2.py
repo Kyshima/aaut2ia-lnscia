@@ -31,7 +31,8 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 def build_model(hp):
     model = keras.Sequential()
-    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu', input_shape=(128, 128, 3)))
+    model.add(keras.layers.Input(shape=(128, 128, 3)))
+    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
     model.add(keras.layers.MaxPooling2D((2, 2)))
     model.add(keras.layers.Conv2D(hp.Int('conv2_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
     model.add(keras.layers.MaxPooling2D((2, 2)))
@@ -41,8 +42,6 @@ def build_model(hp):
     model.add(keras.layers.MaxPooling2D((2, 2)))
     model.add(keras.layers.Flatten())
     model.add(keras.layers.Dense(hp.Int('dense1_units', min_value=32, max_value=512, step=32), activation='relu'))
-    model.add(keras.layers.Dropout(0.5))
-    model.add(keras.layers.Dense(hp.Int('dense2_units', min_value=32, max_value=512, step=32), activation='relu'))
     model.add(keras.layers.Dropout(0.5))
     model.add(keras.layers.Dense(4, activation='softmax'))
 
