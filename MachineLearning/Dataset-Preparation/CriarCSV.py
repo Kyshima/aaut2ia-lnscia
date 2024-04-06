@@ -1,13 +1,18 @@
 import os
+
+import PIL
+import numpy
 from PIL import Image, ImageEnhance, ImageFilter
 import numpy as np
 import pandas as pd
 import pickle
 from sklearn.preprocessing import LabelEncoder
+import cv2
+
 
 def obter_informacoes_pixels(imagem):
-    largura, altura = imagem.size
-    pixels = np.array(imagem.getdata())
+    altura, largura, _ = imagem.shape
+    pixels = imagem.reshape(-1, 3)
     return pixels, largura, altura
 
 def processar_imagem(caminho_da_imagem):
@@ -26,7 +31,11 @@ def processar_imagem(caminho_da_imagem):
 
     # Recombine the channels into an image
     imagem = Image.merge("RGB", (r, g_less_strong, b))
-    imagem = imagem.resize((128, 128))
+
+    open_cv_image = numpy.array(imagem.convert('RGB'))
+    # Convert RGB to BGR
+    imagem = open_cv_image[:, :, ::-1].copy()
+    imagem = cv2.resize(imagem, (128, 128))
     pixels, largura, altura = obter_informacoes_pixels(imagem)
     informacao_pixels = pickle.dumps(pixels)
     return informacao_pixels
@@ -45,7 +54,7 @@ def criar_dataframe_arquivo(pasta, nome_do_arquivo):
             'crop': crop_illness.split("___")[0],
             'illness': crop_illness.split("___")[-1],
             'crop_illness': crop_illness,
-            'Informacao de Pixels': [informacao_pixels],
+            'Informacao de Pixels': informacao_pixels,
         }, index=[0])
     return None
 
@@ -55,9 +64,12 @@ def criar_csv_com_informacoes(diretorio_dos_dados):
     dadosMaster = []
     for pasta, subpastas, arquivos in os.walk(diretorio_dos_dados):
         print(pasta)
-        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos][:500]
-        dados = [df for df in dados if df is not None]
+        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos]
+        dados = [df for df in dados if df is not None][:500]
+        print(len(dados))
         dadosMaster = dadosMaster + dados
+        if len(dadosMaster) >= 500:
+            break
 
     dadosMaster = pd.concat(dadosMaster, axis=0, ignore_index=True)
     dadosMaster.fillna(0, inplace=True)
