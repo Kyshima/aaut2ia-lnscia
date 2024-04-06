@@ -12,7 +12,7 @@ from utils import *
 pd.set_option('display.max_colwidth', None)
 df = pd.read_csv("new.csv", sep=";")
 
-testOneDisease = "cropcommonrust " + df[df['disease'] == 'Common Rust']['treatment'].apply(text_prepare) + " EOF"
+testOneDisease = df[df['formality'] == 'formal'].apply(lambda row: row['crop'] + re.compile(' ').sub('', row['disease']) + ' ' + row['treatment'], axis=1).apply(text_prepare) + " EOF"
 
 def expand_description(df):
     expanded_data = []
@@ -48,16 +48,15 @@ model = Sequential([
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-def on_epoch_end(epoch, _):
-    if epoch == 58:
+def on_epoch_end(model):
         print()
-        print('----- Generating text after Epoch: %d' % epoch)
+        print('----- Generating text after Epoch')
         #start_index = random.randint(0, len(testOneDisease) - maxlen - 1)
         for diversity in [0.2, 0.5, 1.0, 1.2]:
             print('----- diversity:', diversity)
 
             generated = ''
-            sentence = "cropcommonrust"
+            sentence = "corncommonrust"
             generated += sentence
             print('----- Generating with seed: "' + sentence + '"')
             sys.stdout.write(generated)
@@ -75,9 +74,12 @@ def on_epoch_end(epoch, _):
                 if predicted_disease == "EOF":
                     break
 
-print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 
-model.fit(X, y_encoded, epochs=60, batch_size=128, callbacks=[print_callback])
+model.fit(X, y_encoded, epochs=200, batch_size=128)
+
+
+
+on_epoch_end(model)
 
 '''
 df = pd.read_csv("NaturalLanguage/outputModel/preprocessed_dataset.csv")

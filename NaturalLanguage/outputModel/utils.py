@@ -9,11 +9,11 @@ from nltk.corpus import stopwords
 
 # Paths for all resources for the bot.
 RESOURCE_PATH = {
-    'INTENT_RECOGNIZER': 'NaturalLanguage/outputModel/intent_recognizer.pkl',
-    'TAG_CLASSIFIER': 'NaturalLanguage/outputModel/tag_classifier.pkl',
-    'TFIDF_VECTORIZER': 'NaturalLanguage/outputModel/tfidf_vectorizer.pkl',
-    'THREAD_EMBEDDINGS_FOLDER': 'NaturalLanguage/outputModel/thread_embeddings_by_tags',
-    'WORD_EMBEDDINGS': 'NaturalLanguage/outputModel/data/word_embeddings.tsv',
+    'INTENT_RECOGNIZER': 'intent_recognizer.pkl',
+    'TAG_CLASSIFIER': 'tag_classifier.pkl',
+    'TFIDF_VECTORIZER': 'tfidf_vectorizer.pkl',
+    'THREAD_EMBEDDINGS_FOLDER': 'thread_embeddings_by_tags',
+    'WORD_EMBEDDINGS': 'data/word_embeddings.tsv',
 }
 
 
@@ -26,7 +26,7 @@ def text_prepare(text):
     text = text.lower()
     text = replace_by_space_re.sub(' ', text)
     text = good_symbols_re.sub('', text)
-    text = ' '.join([x for x in text.split() if x and x not in stopwords_set])
+    #text = ' '.join([x for x in text.split() if x and x not in stopwords_set])
 
     return text.strip()
 
