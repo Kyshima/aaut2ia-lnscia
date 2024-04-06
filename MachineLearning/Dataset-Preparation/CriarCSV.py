@@ -1,23 +1,19 @@
 import os
-
-import PIL
-import numpy
-from PIL import Image, ImageEnhance, ImageFilter
 import numpy as np
 import pandas as pd
 import pickle
-from sklearn.preprocessing import LabelEncoder
 import cv2
+from PIL import Image, ImageEnhance
+from sklearn.preprocessing import LabelEncoder
 
+def get_pixel_info(image):
+    height, width, _ = image.shape
+    pixels = image.reshape(-1, 3)
+    return pixels, width, height
 
-def obter_informacoes_pixels(imagem):
-    altura, largura, _ = imagem.shape
-    pixels = imagem.reshape(-1, 3)
-    return pixels, largura, altura
-
-def processar_imagem(caminho_da_imagem):
-    imagem = Image.open(caminho_da_imagem)
-    color_enhancer = ImageEnhance.Color(imagem)
+def process_image(image_path):
+    image = Image.open(image_path)
+    color_enhancer = ImageEnhance.Color(image)
     image = color_enhancer.enhance(10)  # Increase color intensity
 
     image_rgb = image.convert("RGB")
@@ -30,23 +26,23 @@ def processar_imagem(caminho_da_imagem):
     g_less_strong = g.point(lambda x: int(x * factor))
 
     # Recombine the channels into an image
-    imagem = Image.merge("RGB", (r, g_less_strong, b))
+    image = Image.merge("RGB", (r, g_less_strong, b))
 
-    open_cv_image = numpy.array(imagem.convert('RGB'))
+    open_cv_image = np.array(image.convert('RGB'))
     # Convert RGB to BGR
-    imagem = open_cv_image[:, :, ::-1].copy()
-    imagem = cv2.resize(imagem, (128, 128))
-    pixels, largura, altura = obter_informacoes_pixels(imagem)
-    informacao_pixels = pickle.dumps(pixels)
-    return informacao_pixels
+    image = open_cv_image[:, :, ::-1].copy()
+    image = cv2.resize(image, (128, 128))
+    pixels, width, height = get_pixel_info(image)
+    pixel_info = pickle.dumps(pixels)
+    return pixel_info
 
 count = 0
-def criar_dataframe_arquivo(pasta, nome_do_arquivo):
+def create_dataframe_file(folder, file_name):
     global count
-    crop_illness = pasta.split("\\")[-1]
-    if crop_illness != "Invalid" and "(1)" not in nome_do_arquivo and nome_do_arquivo.lower().endswith('.jpg'):
-        caminho_da_imagem = os.path.join(pasta, nome_do_arquivo)
-        informacao_pixels = processar_imagem(caminho_da_imagem)
+    crop_illness = folder.split("\\")[-1]
+    if crop_illness != "Invalid" and "(1)" not in file_name and file_name.lower().endswith('.jpg'):
+        image_path = os.path.join(folder, file_name)
+        pixel_info = process_image(image_path)
         count += 1
         if count % 100 == 0:
             print(count)
@@ -54,33 +50,29 @@ def criar_dataframe_arquivo(pasta, nome_do_arquivo):
             'crop': crop_illness.split("___")[0],
             'illness': crop_illness.split("___")[-1],
             'crop_illness': crop_illness,
-            'Informacao de Pixels': informacao_pixels,
+            'Informacao de Pixels': pixel_info,
         }, index=[0])
     return None
 
-
-def criar_csv_com_informacoes(diretorio_dos_dados):
+def create_csv_with_info(data_directory):
     header = True
-    dadosMaster = []
-    for pasta, subpastas, arquivos in os.walk(diretorio_dos_dados):
-        print(pasta)
-        dados = [criar_dataframe_arquivo(pasta, nome_do_arquivo) for nome_do_arquivo in arquivos]
-        dados = [df for df in dados if df is not None][:500]
-        print(len(dados))
-        dadosMaster = dadosMaster + dados
-        if len(dadosMaster) >= 500:
-            break
+    master_data = []
+    for folder, subfolders, files in os.walk(data_directory):
+        print(folder)
+        data = [create_dataframe_file(folder, file_name) for file_name in files]
+        data = [df for df in data if df is not None][:500]
+        print(len(data))
+        master_data = master_data + data
 
-    dadosMaster = pd.concat(dadosMaster, axis=0, ignore_index=True)
-    dadosMaster.fillna(0, inplace=True)
+    master_data = pd.concat(master_data, axis=0, ignore_index=True)
+    master_data.fillna(0, inplace=True)
     label_encoder = LabelEncoder()
-    dadosMaster['crop'] = label_encoder.fit_transform(dadosMaster['crop'])
-    dadosMaster['illness'] = label_encoder.fit_transform(dadosMaster['illness'])
-    dadosMaster['crop_illness'] = label_encoder.fit_transform(dadosMaster['crop_illness'])
-    dadosMaster.to_csv("DatasetBinary128.csv", mode='a', header=header, index=False)
+    master_data['crop'] = label_encoder.fit_transform(master_data['crop'])
+    master_data['illness'] = label_encoder.fit_transform(master_data['illness'])
+    master_data['crop_illness'] = label_encoder.fit_transform(master_data['crop_illness'])
+    master_data.to_csv("DatasetBinary128.csv", mode='a', header=header, index=False)
     header = False
 
-
 if __name__ == "__main__":
-    diretorio_dos_dados = r'C:/Users/Patricia/Documents/GitHub/aaut2ia-lnscia/Dataset'
-    criar_csv_com_informacoes(diretorio_dos_dados)
+    data_directory = r'C:/Users/Diana/Desktop/Dataset'
+    create_csv_with_info(data_directory)
