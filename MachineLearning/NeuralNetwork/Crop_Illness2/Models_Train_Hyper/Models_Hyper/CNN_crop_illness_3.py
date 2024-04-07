@@ -8,11 +8,12 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 from PIL import Image
 import pickle
 import random
-import keras_tuner
 from keras_tuner.tuners import RandomSearch
-import matplotlib.pyplot as plt
 
-random.seed(100)
+random_seed = 100
+random.seed(random_seed)
+np.random.seed(random_seed)
+tf.random.set_seed(random_seed)
 
 dataset = pd.read_csv("C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/DatasetBinary128.csv")
 
@@ -26,29 +27,33 @@ X = X.reshape(X.shape[0], 128, 128, 3)
 X = X / 255.00
 
 label_encoder = LabelEncoder()
-y = label_encoder.fit_transform(dataset['crop'])
+y = label_encoder.fit_transform(dataset['crop_illness'])
 
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 #Hyperparameters
-min_filters = 16  # Minimum number of filters for convolutional layers 
+min_filters = 16  # Minimum number of filters for convolutional layers
 max_filters = 64  # Maximum number of filters for convolutional layers
 filter_step = 16  # Step size for increasing the number of filters in convolutional layers
-kernel_sizes = [3, 5, 7]  # List of kernel sizes for convolutional layers 
+kernel_sizes = [3, 5, 7]  # List of kernel sizes for convolutional layers
 activation_function = "relu"  # Activation function used in convolutional and dense layers
 pool_sizes = [2, 3]  # List of pool sizes for max-pooling layers
 dense_min_units = 32  # Minimum number of units for dense (fully connected) layers
-dense_max_units = 128  # Maximum number of units for dense (fully connected) layers
+dense_max_units = 512  # Maximum number of units for dense (fully connected) layers
 dense_step_units = 32  # Step size for increasing the number of units in dense (fully connected) layers
+dropout_min = 0.1  # Minimum dropout rate
+dropout_max = 0.5  # Maximum dropout rate
+dropout_step = 0.1  # Step size for increasing the dropout rate
 
 def build_model(hp):
     model = keras.Sequential()
-
+    model.add(keras.layers.Input(shape=(128, 128, 3)))
+    
     # Convolutional Layer 1
     conv1_units = hp.Int('conv1_units', min_value=min_filters, max_value=max_filters, step=filter_step)
     kernel_size1 = hp.Choice('kernel_size1', values=kernel_sizes)    
     model.add(keras.layers.Conv2D(conv1_units, (kernel_size1, kernel_size1), activation=activation_function, padding='same'))
-   
+
     # MaxPooling Layer 1
     pool_size1 = (hp.Choice('pool_size1_height', values=pool_sizes), hp.Choice('pool_size1_width', values=pool_sizes))
     model.add(keras.layers.MaxPooling2D(pool_size=pool_size1))
@@ -67,25 +72,55 @@ def build_model(hp):
     kernel_size3 = hp.Choice('kernel_size3', values=kernel_sizes)    
     model.add(keras.layers.Conv2D(conv3_units, (kernel_size3, kernel_size3), activation=activation_function, padding='same'))
     
-    # Flatten Layer
+    # MaxPooling Layer 3
+    pool_size3 = (hp.Choice('pool_size3_height', values=pool_sizes), hp.Choice('pool_size3_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size3))
+    
+    # Convolutional Layer 4
+    conv4_units = hp.Int('conv4_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size4 = hp.Choice('kernel_size4', values=kernel_sizes)    
+    model.add(keras.layers.Conv2D(conv4_units, (kernel_size4, kernel_size4), activation=activation_function, padding='same'))
+    
+    # MaxPooling Layer 4
+    pool_size4 = (hp.Choice('pool_size4_height', values=pool_sizes), hp.Choice('pool_size4_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size4))
+
+    # Convolutional Layer 5
+    conv5_units = hp.Int('conv5_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size5 = hp.Choice('kernel_size5', values=kernel_sizes)    
+    model.add(keras.layers.Conv2D(conv5_units, (kernel_size5, kernel_size5), activation=activation_function, padding='same'))
+    
+    # MaxPooling Layer 5
+    pool_size5 = (hp.Choice('pool_size5_height', values=pool_sizes), hp.Choice('pool_size5_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size5))
+    
     model.add(keras.layers.Flatten())
     
+    # Dense Layer 1
+    model.add(keras.layers.Dense(hp.Int('dense1_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units), activation='relu'))
+    
+    # Dropout Layer
+    model.add(keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+    
+    # Dense Layer 2
+    model.add(keras.layers.Dense(hp.Int('dense2_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units), activation='relu'))
+    
+    # Dropout Layer
+    model.add(keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+
+    # Dense Layer 3
+    model.add(keras.layers.Dense(hp.Int('dense3_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units), activation='relu'))
+    
+    # Dropout Layer
+    model.add(keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+    
     # Output Layer
-    model.add(keras.layers.Dense(hp.Int('dense_units', min_value = dense_min_units, max_value = dense_max_units, step = dense_step_units), activation='relu'))
-    model.add(keras.layers.Dense(4, activation='softmax'))
+    model.add(keras.layers.Dense(14, activation='softmax'))
 
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
     return model
-
-
-Model_Checkpoint = tf.keras.callbacks.ModelCheckpoint(
-    'C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/cnn_crop_classification1.keras',
-    monitor='val_loss', 
-    save_best_only='True',
-    verbose=1
-)
 
 Early_Stopping = tf.keras.callbacks.EarlyStopping(
     monitor='val_loss', 
@@ -99,14 +134,14 @@ tuner = RandomSearch(
     build_model,
     objective='val_accuracy',
     max_trials=10,  # Number of hyperparameter combinations to try
-    directory='C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/HyperparametersTests/cnn_crop_classification1_hyper',  # Directory to store the tuning results
+    directory='C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop_Illness2/Models_Train_Hyper/HyperparametersTests/cnn_crop_illness3_hyper',  # Directory to store the tuning results
     project_name='cnn_hyperparameter_tuning'  # Name of the tuning project
 )
 
 tuner.search(x_train, y_train,
              epochs=10,
              validation_data=(x_test, y_test),
-             callbacks=[Model_Checkpoint, Early_Stopping])
+             callbacks=[Early_Stopping])
 
 best_model = tuner.get_best_models(num_models=1)[0]
 
