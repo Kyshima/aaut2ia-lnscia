@@ -30,22 +30,55 @@ y = label_encoder.fit_transform(dataset['crop'])
 
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
+#Hyperparameters
+min_filters = 16  # Minimum number of filters for convolutional layers 
+max_filters = 64  # Maximum number of filters for convolutional layers
+filter_step = 16  # Step size for increasing the number of filters in convolutional layers
+kernel_sizes = [3, 5, 7]  # List of kernel sizes for convolutional layers 
+activation_function = "relu"  # Activation function used in convolutional and dense layers
+pool_sizes = [2, 3]  # List of pool sizes for max-pooling layers
+dense_min_units = 32  # Minimum number of units for dense (fully connected) layers
+dense_max_units = 128  # Maximum number of units for dense (fully connected) layers
+dense_step_units = 32  # Step size for increasing the number of units in dense (fully connected) layers
+
 def build_model(hp):
     model = keras.Sequential()
-    model.add(keras.layers.Input(shape=(128, 128, 3)))
-    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv2_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv3_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
+
+    # Convolutional Layer 1
+    conv1_units = hp.Int('conv1_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size1 = hp.Choice('kernel_size1', values=kernel_sizes)    
+    model.add(keras.layers.Conv2D(conv1_units, (kernel_size1, kernel_size1), activation=activation_function, padding='same'))
+   
+    # MaxPooling Layer 1
+    pool_size1 = (hp.Choice('pool_size1_height', values=pool_sizes), hp.Choice('pool_size1_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size1))
+    
+    # Convolutional Layer 2
+    conv2_units = hp.Int('conv2_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size2 = hp.Choice('kernel_size2', values=kernel_sizes)
+    model.add(keras.layers.Conv2D(conv2_units, (kernel_size2, kernel_size2), activation=activation_function, padding='same'))
+    
+    # MaxPooling Layer 2
+    pool_size2 = (hp.Choice('pool_size2_height', values=pool_sizes), hp.Choice('pool_size2_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size2))
+    
+    # Convolutional Layer 3
+    conv3_units = hp.Int('conv3_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size3 = hp.Choice('kernel_size3', values=kernel_sizes)    
+    model.add(keras.layers.Conv2D(conv3_units, (kernel_size3, kernel_size3), activation=activation_function, padding='same'))
+    
+    # Flatten Layer
     model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(hp.Int('dense_units', min_value=32, max_value=128, step=32), activation='relu'))
+    
+    # Output Layer
+    model.add(keras.layers.Dense(hp.Int('dense_units', min_value = dense_min_units, max_value = dense_max_units, step = dense_step_units), activation='relu'))
     model.add(keras.layers.Dense(4, activation='softmax'))
 
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
     return model
+
 
 Model_Checkpoint = tf.keras.callbacks.ModelCheckpoint(
     'C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/cnn_crop_classification1.keras',
