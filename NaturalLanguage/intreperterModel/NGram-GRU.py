@@ -16,7 +16,6 @@ if __name__ == "__main__":
     X_text = df['visual_description']
     y = df['crop'].astype(str) + df['disease']
 
-
     # Convert string labels to integer labels
     label_encoder = LabelEncoder()
     y = label_encoder.fit_transform(y)
@@ -26,8 +25,8 @@ if __name__ == "__main__":
     # One-hot encode the new categorical feature
     df['formality'] = df['formality'].fillna("informal")
     formality = df['formality'].values.reshape(-1, 1)
-    label_encoder = LabelEncoder()
-    formality_encoded = label_encoder.fit_transform(formality)
+    formality_encoder = LabelEncoder()
+    formality_encoded = formality_encoder.fit_transform(formality)
 
     # TF-IDF Vectorization
     vectorizer = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
@@ -44,12 +43,11 @@ if __name__ == "__main__":
     # Split the data into training and testing sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-
     # Build GRU model
     num_classes = len(np.unique(y))
-    epochs = 20
-    batch_size = 64
-    learning_rate = 0.001
+    epochs = 10
+    batch_size = 32
+    learning_rate = 0.01
     embedding_dim = 100
     max_sequence_length = 100
     dropout_rate = 0.2
@@ -68,7 +66,7 @@ if __name__ == "__main__":
     model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.1)
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.3)
 
     # Evaluate the model on the test set
     y_pred = model.predict(X_test).argmax(axis=1)
@@ -83,3 +81,16 @@ if __name__ == "__main__":
     print(f'Precision: {precision}')
     print(f'Recall: {recall}')
     print(f'F1 Score: {f1}')
+
+    form = formality_encoder.transform(["formal"])
+
+    X_tfidf = vectorizer.transform(["Manifestation is evident through the formation of oval to elongated tan lesions surrounded by distinct dark borders on corn foliage."]).toarray()
+
+    # Convert TF-IDF matrices to sequences
+    X_sequences = [np.where(row > 0)[0] for row in X_tfidf]
+
+    X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
+    X = np.hstack((X_padded, [form]))
+
+    print(model.predict(X).argmax(axis=1))
+    print(label_encoder.inverse_transform(model.predict(X).argmax(axis=1)))

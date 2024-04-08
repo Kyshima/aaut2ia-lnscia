@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 from keras.src.layers import Dropout
 from keras.src.optimizers import Adam
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -9,11 +10,13 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from keras.models import Sequential
 from keras.layers import Embedding, LSTM, Dense
 from keras.preprocessing.sequence import pad_sequences
+import pickle
+from utils import *
 
 if __name__ == "__main__":
     df = pd.read_csv("new.csv", sep=";")
     # Assuming 'descriptions' is a column in your DataFrame containing the textual descriptions
-    X_text = df['visual_description']
+    X_text = df['visual_description'].apply(text_prepare)
     df['formality'] = df['formality'].fillna("informal")
     y = df['formality']  # Replace 'labels' with the actual column name for your categories
 
@@ -29,7 +32,7 @@ if __name__ == "__main__":
     X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X_padded, y, test_size=0.4, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X_padded, y, test_size=0.4)
 
     label_encoder = LabelEncoder()
     y_train = label_encoder.fit_transform(y_train)
@@ -37,8 +40,8 @@ if __name__ == "__main__":
 
     # Build LSTM model
     num_classes = len(np.unique(y))
-    epochs = 20
-    batch_size = 64
+    epochs = 30
+    batch_size = 48
     learning_rate = 0.001
     embedding_dim = 100
     max_sequence_length = 100
@@ -46,16 +49,20 @@ if __name__ == "__main__":
 
     model = Sequential()
     model.add(Embedding(input_dim=len(vectorizer.get_feature_names_out()), output_dim=embedding_dim))
+    model.add(LSTM(128, return_sequences=True))
+    model.add(Dropout(dropout_rate))
+    model.add(LSTM(96, return_sequences=True))
+    model.add(Dropout(dropout_rate))
     model.add(LSTM(128))
     model.add(Dropout(dropout_rate))
     model.add(Dense(units=num_classes, activation='softmax'))
 
     # Compile the model
-    optimizer = Adam(learning_rate=learning_rate)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
     model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.1)
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.8)
 
     # Evaluate the model on the test set
     y_pred = model.predict(X_test).argmax(axis=1)
@@ -70,3 +77,28 @@ if __name__ == "__main__":
     print(f'Precision: {precision}')
     print(f'Recall: {recall}')
     print(f'F1 Score: {f1}')
+
+
+    X_tfidf = vectorizer.transform([text_prepare("The wheat leaves display small, rusty-brown spots scattered across their surface.")]).toarray()
+
+    # Convert TF-IDF matrices to sequences
+    X_sequences = [np.where(row > 0)[0] for row in X_tfidf]
+
+    X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
+
+    print(model.predict(X_padded))
+    print(label_encoder.inverse_transform(model.predict(X_padded).argmax(axis=1)))
+
+    model.save("../../Final-Models/formality-model.h5")
+
+    with open("../../Final-Models/models/formality-model.pkl", "wb") as f:
+        pickle.dump(vectorizer, f)
+
+    with open("../../Final-Models/models/formality-model-vectorizer.pkl", "wb") as f:
+        pickle.dump(vectorizer, f)
+
+    with open("../../Final-Models/models/formality-model-encoder.pkl", "wb") as f:
+        pickle.dump(label_encoder, f)
+
+    with open("../../Final-Models/models/formality-model-sequence_length.pkl", "wb") as f:
+        pickle.dump(max_sequence_length, f)

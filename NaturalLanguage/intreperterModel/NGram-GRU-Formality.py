@@ -9,6 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 from keras.models import Sequential
 from keras.layers import Embedding, GRU, Dense
 from keras.preprocessing.sequence import pad_sequences
+from utils import *
 
 if __name__ == "__main__":
     df = pd.read_csv("new.csv", sep=";")
@@ -34,7 +35,7 @@ if __name__ == "__main__":
     X_padded = pad_sequences(X_sequences, maxlen=max_sequence_length)
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X_padded, y, test_size=0.3, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X_padded, y, test_size=0.4)
 
 
     # Build GRU model
@@ -60,7 +61,7 @@ if __name__ == "__main__":
     model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.1)
+    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.8)
 
     # Evaluate the model on the test set
     y_pred = model.predict(X_test).argmax(axis=1)

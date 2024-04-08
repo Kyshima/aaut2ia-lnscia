@@ -56,7 +56,7 @@ def on_epoch_end(model):
             print('----- diversity:', diversity)
 
             generated = ''
-            sentence = "corncommonrust"
+            sentence = "wheatyellowrust"
             generated += sentence
             print('----- Generating with seed: "' + sentence + '"')
             sys.stdout.write(generated)
@@ -80,6 +80,14 @@ model.fit(X, y_encoded, epochs=200, batch_size=128)
 
 
 on_epoch_end(model)
+
+model.save("text-generator-model.keras")
+
+with open("../../Final-Models/models/text-generator-tokenizer.pkl", "wb") as f:
+    pickle.dump(tokenizer, f)
+
+with open("../../Final-Models/models/text-generator-label-encoder.pkl", "wb") as f:
+    pickle.dump(label_encoder, f)
 
 '''
 df = pd.read_csv("NaturalLanguage/outputModel/preprocessed_dataset.csv")
