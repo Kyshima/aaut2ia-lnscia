@@ -15,10 +15,12 @@ random.seed(100)
 
 dataset = pd.read_csv("DatasetBinary128.csv")
 
+
 def decode_image(pickled_data):
     image_array = pickle.loads(eval(pickled_data))
     image = Image.fromarray(image_array)
     return np.array(image)
+
 
 X = np.array([decode_image(data) for data in dataset['Informacao de Pixels']])
 X = X.reshape(X.shape[0], 128, 128, 3)
@@ -29,24 +31,83 @@ y = label_encoder.fit_transform(dataset['crop_illness'])
 
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
+# Hyperparameters
+min_filters = 16  # Minimum number of filters for convolutional layers
+max_filters = 64  # Maximum number of filters for convolutional layers
+filter_step = 16  # Step size for increasing the number of filters in convolutional layers
+kernel_sizes = [3, 5, 7]  # List of kernel sizes for convolutional layers
+activation_function = "relu"  # Activation function used in convolutional and dense layers
+pool_sizes = [2, 3]  # List of pool sizes for max-pooling layers
+dense_min_units = 32  # Minimum number of units for dense (fully connected) layers
+dense_max_units = 512  # Maximum number of units for dense (fully connected) layers
+dense_step_units = 32  # Step size for increasing the number of units in dense (fully connected) layers
+dropout_min = 0.1  # Minimum dropout rate
+dropout_max = 0.5  # Maximum dropout rate
+dropout_step = 0.1  # Step size for increasing the dropout rate
+
+
 def build_model(hp):
     model = keras.Sequential()
     model.add(keras.layers.Input(shape=(128, 128, 3)))
-    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
+
+    # Convolutional Layer 1
+    conv1_units = hp.Int('conv1_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size1 = hp.Choice('kernel_size1', values=kernel_sizes)
+    model.add(
+        keras.layers.Conv2D(conv1_units, (kernel_size1, kernel_size1), activation=activation_function, padding='same'))
     model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv1_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv2_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv3_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
-    model.add(keras.layers.Conv2D(hp.Int('conv4_units', min_value=16, max_value=64, step=16), (3, 3), activation='relu'))
-    model.add(keras.layers.MaxPooling2D((2, 2)))
+
+    # Convolutional Layer 2
+    conv2_units = hp.Int('conv2_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size2 = hp.Choice('kernel_size2', values=kernel_sizes)
+    model.add(
+        keras.layers.Conv2D(conv2_units, (kernel_size2, kernel_size2), activation=activation_function, padding='same'))
+
+    # MaxPooling Layer 1
+    pool_size1 = (hp.Choice('pool_size1_height', values=pool_sizes), hp.Choice('pool_size1_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size1))
+
+    # Convolutional Layer 3
+    conv3_units = hp.Int('conv3_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size3 = hp.Choice('kernel_size3', values=kernel_sizes)
+    model.add(
+        keras.layers.Conv2D(conv3_units, (kernel_size3, kernel_size3), activation=activation_function, padding='same'))
+
+    # MaxPooling Layer 2
+    pool_size2 = (hp.Choice('pool_size2_height', values=pool_sizes), hp.Choice('pool_size2_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size2))
+
+    # Convolutional Layer 4
+    conv4_units = hp.Int('conv4_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size4 = hp.Choice('kernel_size4', values=kernel_sizes)
+    model.add(
+        keras.layers.Conv2D(conv4_units, (kernel_size4, kernel_size4), activation=activation_function, padding='same'))
+
+    # MaxPooling Layer 3
+    pool_size3 = (hp.Choice('pool_size3_height', values=pool_sizes), hp.Choice('pool_size3_width', values=pool_sizes))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size3))
+
     model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(hp.Int('dense1_units', min_value=32, max_value=512, step=32), activation='relu'))
-    model.add(keras.layers.Dropout(0.5))
-    model.add(keras.layers.Dense(hp.Int('dense2_units', min_value=32, max_value=512, step=32), activation='relu'))
-    model.add(keras.layers.Dropout(0.5))
+
+    # Dense Layer 1
+    model.add(keras.layers.Dense(
+        hp.Int('dense1_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units),
+        activation='relu'))
+
+    # Dropout Layer
+    model.add(
+        keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+
+    # Dense Layer 2
+    model.add(keras.layers.Dense(
+        hp.Int('dense2_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units),
+        activation='relu'))
+
+    # Dropout Layer
+    model.add(
+        keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+
+    # Output Layer
     model.add(keras.layers.Dense(14, activation='softmax'))
 
     model.compile(optimizer='adam',
@@ -54,8 +115,9 @@ def build_model(hp):
                   metrics=['accuracy'])
     return model
 
+
 Model_Checkpoint = tf.keras.callbacks.ModelCheckpoint(
-    'cnn_crop_illness_classification1.keras',
+    'cnn_crop_illness_classification3.keras',
     monitor='val_loss',
     save_best_only='True',
     verbose=1
@@ -73,12 +135,13 @@ tuner = RandomSearch(
     build_model,
     objective='val_accuracy',
     max_trials=10,  # Number of hyperparameter combinations to try
-    directory='HyperparametersTests/cnn_crop_illness_classification1_hyper',  # Directory to store the tuning results
+    directory='HyperparametersTests/cnn_crop_illness_classification3_hyper',
+    # Directory to store the tuning results
     project_name='cnn_hyperparameter_tuning'  # Name of the tuning project
 )
 
 tuner.search(x_train, y_train,
-             epochs=20,
+             epochs=10,
              validation_data=(x_test, y_test),
              callbacks=[Model_Checkpoint, Early_Stopping])
 
