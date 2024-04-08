@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 
-sample_size = 1495
+sample_size = 3495
 
 dialogue_df = pd.read_csv('data/dialogues.tsv', sep='\t').sample(sample_size, random_state=0)
 crop_dialogue_df = pd.read_csv('data/crop_dialogue.csv', sep=';')

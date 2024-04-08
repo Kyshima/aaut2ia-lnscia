@@ -1,6 +1,9 @@
 import nltk
 from nltk.chat.util import Chat, reflections
 from utils import *
+import yaml
+import os
+
 
 pairs = [
     (r'hi|hello|hey', ['Hello!', 'Hi there!', 'Hey!']),
@@ -10,6 +13,21 @@ pairs = [
     (r'what can you do?', ['I can have basic conversations with you.', 'I can answer your questions.', 'I am here to chat with you.']),
     (r'quit', ['Bye! Take care.', 'Goodbye!']),
 ]
+
+input_file = 'output_pairs.yml'
+
+with open(input_file, 'r', encoding='utf-8') as yamlfile:
+    data = yaml.safe_load(yamlfile)
+    # Iterate over all keys in the YAML data
+    for key in data.keys():
+        # Check if the key contains conversation pairs
+        if isinstance(data[key], list) and len(data[key]) > 0 and isinstance(data[key][0], list) and len(
+                data[key][0]) == 2:
+            for conversation_pair in data[key]:
+                input_pattern = conversation_pair[0]
+                response = conversation_pair[1]
+                pairs.append((input_pattern, response))
+
 
 intent_recognizer = unpickle_file(RESOURCE_PATH['INTENT_RECOGNIZER'])
 tfidf_vectorizer = unpickle_file(RESOURCE_PATH['TFIDF_VECTORIZER'])
@@ -32,6 +50,17 @@ while True:
     if intent == 'dialogue':
         # Pass question to chitchat_bot to generate a response.
         response = chatbot.respond(user_input)
+        print("ChatBot:", response)
+        if user_input.lower() == 'quit':
+            break
+
+    if intent == 'visual_description':
+        response = 'Could you please provide a visual description of the problem with your crop?'
+        print("ChatBot:", response)
+
+        user_input = input("You: ")
+
+        response = 'Shit, that sounds serious af my brother!' #inserir tratamento dos modelos
         print("ChatBot:", response)
         if user_input.lower() == 'quit':
             break

@@ -3,7 +3,21 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\NaturalLanguage\chatbot\crop_dialogue.csv">
+        <entry key="\NaturalLanguage\chatbot\data\crop_dialogue.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\NaturalLanguage\chatbot\new.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\NaturalLanguage\intreperterModel\RandDescrip.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -18,13 +32,6 @@
           </value>
         </entry>
         <entry key="\NaturalLanguage\intreperterModel\new_bk.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value=";" />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\NaturalLanguage\new.csv">
           <value>
             <Attribute>
               <option name="separator" value=";" />
