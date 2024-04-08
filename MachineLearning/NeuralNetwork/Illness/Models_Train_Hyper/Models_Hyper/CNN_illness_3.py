@@ -9,6 +9,9 @@ from PIL import Image
 import pickle
 import random
 from keras_tuner.tuners import RandomSearch
+import os
+
+os.environ['PYTHONHASHSEED'] = '0'
 
 random_seed = 100
 random.seed(random_seed)
@@ -37,7 +40,7 @@ max_filters = 64  # Maximum number of filters for convolutional layers
 filter_step = 16  # Step size for increasing the number of filters in convolutional layers
 kernel_sizes = [3, 5, 7]  # List of kernel sizes for convolutional layers
 activation_function = "relu"  # Activation function used in convolutional and dense layers
-pool_sizes = [2, 3]  # List of pool sizes for max-pooling layers
+pool_size = 2  # Pool size for max-pooling layers
 dense_min_units = 32  # Minimum number of units for dense (fully connected) layers
 dense_max_units = 512  # Maximum number of units for dense (fully connected) layers
 dense_step_units = 32  # Step size for increasing the number of units in dense (fully connected) layers
@@ -55,8 +58,7 @@ def build_model(hp):
     model.add(keras.layers.Conv2D(conv1_units, (kernel_size1, kernel_size1), activation=activation_function, padding='same'))
 
     # MaxPooling Layer 1
-    pool_size1 = (hp.Choice('pool_size1_height', values=pool_sizes), hp.Choice('pool_size1_width', values=pool_sizes))
-    model.add(keras.layers.MaxPooling2D(pool_size=pool_size1))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
     
     # Convolutional Layer 2
     conv2_units = hp.Int('conv2_units', min_value=min_filters, max_value=max_filters, step=filter_step)
@@ -64,8 +66,7 @@ def build_model(hp):
     model.add(keras.layers.Conv2D(conv2_units, (kernel_size2, kernel_size2), activation=activation_function, padding='same'))
     
     # MaxPooling Layer 2
-    pool_size2 = (hp.Choice('pool_size2_height', values=pool_sizes), hp.Choice('pool_size2_width', values=pool_sizes))
-    model.add(keras.layers.MaxPooling2D(pool_size=pool_size2))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
     
     # Convolutional Layer 3
     conv3_units = hp.Int('conv3_units', min_value=min_filters, max_value=max_filters, step=filter_step)
@@ -73,8 +74,7 @@ def build_model(hp):
     model.add(keras.layers.Conv2D(conv3_units, (kernel_size3, kernel_size3), activation=activation_function, padding='same'))
     
     # MaxPooling Layer 3
-    pool_size3 = (hp.Choice('pool_size3_height', values=pool_sizes), hp.Choice('pool_size3_width', values=pool_sizes))
-    model.add(keras.layers.MaxPooling2D(pool_size=pool_size3))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
     
     # Convolutional Layer 4
     conv4_units = hp.Int('conv4_units', min_value=min_filters, max_value=max_filters, step=filter_step)
@@ -82,8 +82,7 @@ def build_model(hp):
     model.add(keras.layers.Conv2D(conv4_units, (kernel_size4, kernel_size4), activation=activation_function, padding='same'))
     
     # MaxPooling Layer 4
-    pool_size4 = (hp.Choice('pool_size4_height', values=pool_sizes), hp.Choice('pool_size4_width', values=pool_sizes))
-    model.add(keras.layers.MaxPooling2D(pool_size=pool_size4))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
 
     # Convolutional Layer 5
     conv5_units = hp.Int('conv5_units', min_value=min_filters, max_value=max_filters, step=filter_step)
@@ -91,28 +90,36 @@ def build_model(hp):
     model.add(keras.layers.Conv2D(conv5_units, (kernel_size5, kernel_size5), activation=activation_function, padding='same'))
     
     # MaxPooling Layer 5
-    pool_size5 = (hp.Choice('pool_size5_height', values=pool_sizes), hp.Choice('pool_size5_width', values=pool_sizes))
-    model.add(keras.layers.MaxPooling2D(pool_size=pool_size5))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
+
+    # Convolutional Layer 6
+    conv6_units = hp.Int('conv6_units', min_value=min_filters, max_value=max_filters, step=filter_step)
+    kernel_size6 = hp.Choice('kernel_size6', values=kernel_sizes)    
+    model.add(keras.layers.Conv2D(conv6_units, (kernel_size6, kernel_size6), activation=activation_function, padding='same'))
     
+    # MaxPooling Layer 6
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
+    
+    #Flatten Layer
     model.add(keras.layers.Flatten())
-    
+
     # Dense Layer 1
     model.add(keras.layers.Dense(hp.Int('dense1_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units), activation='relu'))
     
-    # Dropout Layer
-    model.add(keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
-    
+    # Dropout Layer 1
+    model.add(keras.layers.Dropout(hp.Float('dropout_rate1', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+
     # Dense Layer 2
     model.add(keras.layers.Dense(hp.Int('dense2_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units), activation='relu'))
-    
-    # Dropout Layer
-    model.add(keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+
+    # Dropout Layer 2
+    model.add(keras.layers.Dropout(hp.Float('dropout_rate2', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
 
     # Dense Layer 3
     model.add(keras.layers.Dense(hp.Int('dense3_units', min_value=dense_min_units, max_value=dense_max_units, step=dense_step_units), activation='relu'))
-    
-    # Dropout Layer
-    model.add(keras.layers.Dropout(hp.Float('dropout_rate', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
+
+    # Dropout Layer 3
+    model.add(keras.layers.Dropout(hp.Float('dropout_rate3', min_value=dropout_min, max_value=dropout_max, step=dropout_step)))
     
     # Output Layer
     model.add(keras.layers.Dense(14, activation='softmax'))
@@ -127,15 +134,15 @@ Early_Stopping = tf.keras.callbacks.EarlyStopping(
     patience=5,
     verbose=1,
     restore_best_weights='True',
-    min_delta=0.1
-)
+    min_delta=0.01)
 
 tuner = RandomSearch(
     build_model,
     objective='val_accuracy',
     max_trials=10,  # Number of hyperparameter combinations to try
     directory='C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Illness/Models_Train_Hyper/HyperparametersTests/cnn_illness3_hyper',  # Directory to store the tuning results
-    project_name='cnn_hyperparameter_tuning'  # Name of the tuning project
+    project_name='cnn_hyperparameter_tuning',  # Name of the tuning project
+    seed = random_seed
 )
 
 tuner.search(x_train, y_train,

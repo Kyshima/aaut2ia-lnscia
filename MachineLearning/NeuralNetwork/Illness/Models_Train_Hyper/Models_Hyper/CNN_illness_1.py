@@ -9,6 +9,9 @@ from PIL import Image
 import pickle
 import random
 from keras_tuner.tuners import RandomSearch
+import os
+
+os.environ['PYTHONHASHSEED'] = '0'
 
 random_seed = 100
 random.seed(random_seed)
@@ -37,13 +40,14 @@ max_filters = 64  # Maximum number of filters for convolutional layers
 filter_step = 16  # Step size for increasing the number of filters in convolutional layers
 kernel_sizes = [3, 5, 7]  # List of kernel sizes for convolutional layers 
 activation_function = "relu"  # Activation function used in convolutional and dense layers
-pool_sizes = [2, 3]  # List of pool sizes for max-pooling layers
+pool_size = 2 #Pool size for max-pooling layers
 dense_min_units = 32  # Minimum number of units for dense (fully connected) layers
 dense_max_units = 128  # Maximum number of units for dense (fully connected) layers
 dense_step_units = 32  # Step size for increasing the number of units in dense (fully connected) layers
 
 def build_model(hp):
     model = keras.Sequential()
+    model.add(keras.layers.Input(shape=(128, 128, 3)))
 
     # Convolutional Layer 1
     conv1_units = hp.Int('conv1_units', min_value=min_filters, max_value=max_filters, step=filter_step)
@@ -51,23 +55,24 @@ def build_model(hp):
     model.add(keras.layers.Conv2D(conv1_units, (kernel_size1, kernel_size1), activation=activation_function, padding='same'))
    
     # MaxPooling Layer 1
-    pool_size1 = (hp.Choice('pool_size1_height', values=pool_sizes), hp.Choice('pool_size1_width', values=pool_sizes))
-    model.add(keras.layers.MaxPooling2D(pool_size=pool_size1))
-    
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
+
     # Convolutional Layer 2
     conv2_units = hp.Int('conv2_units', min_value=min_filters, max_value=max_filters, step=filter_step)
     kernel_size2 = hp.Choice('kernel_size2', values=kernel_sizes)
     model.add(keras.layers.Conv2D(conv2_units, (kernel_size2, kernel_size2), activation=activation_function, padding='same'))
     
     # MaxPooling Layer 2
-    pool_size2 = (hp.Choice('pool_size2_height', values=pool_sizes), hp.Choice('pool_size2_width', values=pool_sizes))
-    model.add(keras.layers.MaxPooling2D(pool_size=pool_size2))
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
     
     # Convolutional Layer 3
     conv3_units = hp.Int('conv3_units', min_value=min_filters, max_value=max_filters, step=filter_step)
     kernel_size3 = hp.Choice('kernel_size3', values=kernel_sizes)    
     model.add(keras.layers.Conv2D(conv3_units, (kernel_size3, kernel_size3), activation=activation_function, padding='same'))
     
+    # MaxPooling Layer 3
+    model.add(keras.layers.MaxPooling2D(pool_size=pool_size))
+
     # Flatten Layer
     model.add(keras.layers.Flatten())
     
@@ -85,15 +90,15 @@ Early_Stopping = tf.keras.callbacks.EarlyStopping(
     patience=5,
     verbose=1,
     restore_best_weights='True',
-    min_delta=0.1
-)
+    min_delta=0.01)
 
 tuner = RandomSearch(
     build_model,
     objective='val_accuracy',
     max_trials=10,  # Number of hyperparameter combinations to try
     directory='C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Illness/Models_Train_Hyper/HyperparametersTests/cnn_illness1_hyper',  # Directory to store the tuning results
-    project_name='cnn_hyperparameter_tuning'  # Name of the tuning project
+    project_name='cnn_hyperparameter_tuning',  # Name of the tuning project
+    seed = random_seed
 )
 
 tuner.search(x_train, y_train,
