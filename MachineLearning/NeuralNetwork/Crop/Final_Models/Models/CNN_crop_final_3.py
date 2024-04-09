@@ -131,7 +131,11 @@ print(f'Precision: {precision}')
 print(f'Recall: {recall}')
 print(f'F1 Score: {f1}')
 
+# Save the trained model
+model.save('C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/Final_Models/Models_Exported/crop3.h5')
+
 #-----------------------------Graphs---------------------------------
+
 # Confusion matrix
 conf_matrix = confusion_matrix(y_test, binary_predictions)
 plt.figure(figsize=(10, 8))

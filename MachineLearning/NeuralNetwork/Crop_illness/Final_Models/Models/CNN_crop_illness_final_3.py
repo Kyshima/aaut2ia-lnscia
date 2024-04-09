@@ -4,10 +4,12 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 from PIL import Image
 import pickle
 import random
+import seaborn as sns
+import matplotlib.pyplot as plt
 import os
 
 os.environ['PYTHONHASHSEED'] = '0'
@@ -128,3 +130,36 @@ f1 = f1_score(y_test, binary_predictions, average='weighted')
 print(f'Precision: {precision}')
 print(f'Recall: {recall}')
 print(f'F1 Score: {f1}')
+
+# Save the trained model
+model.save('C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop_Illness/Final_Models/Models_Exported/crop_illness3.h5')
+
+#-----------------------------Graphs---------------------------------
+
+# Confusion matrix
+conf_matrix = confusion_matrix(y_test, binary_predictions)
+plt.figure(figsize=(10, 8))
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.xlabel('Predicted labels')
+plt.ylabel('True labels')
+plt.title('Confusion Matrix')
+plt.show()
+
+# Plot the graph of accuracy versus epochs
+plt.plot(history.history['accuracy'], label='Training Accuracy')
+plt.plot(history.history['val_accuracy'], label='Test Accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.title('Training and Test Accuracy')
+plt.legend()
+plt.show()
+
+# Plot the graph of loss versus epochs
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Test Loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Training and Test Loss')
+plt.legend()
+plt.show()
+

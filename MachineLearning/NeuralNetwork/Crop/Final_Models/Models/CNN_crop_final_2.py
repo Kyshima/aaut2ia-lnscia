@@ -108,6 +108,9 @@ print(f'Precision: {precision}')
 print(f'Recall: {recall}')
 print(f'F1 Score: {f1}')
 
+# Save the trained model
+model.save('C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/Final_Models/Models_Exported/crop2.h5')
+
 #-----------------------------Graphs---------------------------------
 
 # Confusion matrix

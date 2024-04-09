@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import precision_score, recall_score, f1_score, confusion_matrix
 from PIL import Image
 import pickle
@@ -128,5 +127,3 @@ plt.ylabel('Loss')
 plt.title('Training and Test Loss')
 plt.legend()
 plt.show()
-
-

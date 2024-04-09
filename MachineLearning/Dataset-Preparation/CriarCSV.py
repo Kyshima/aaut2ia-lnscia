@@ -68,8 +68,17 @@ def create_csv_with_info(data_directory):
     master_data.fillna(0, inplace=True)
     label_encoder = LabelEncoder()
     master_data['crop'] = label_encoder.fit_transform(master_data['crop'])
+    with open('C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/Predict/label_encoder_crop.pkl', "wb") as f:
+        pickle.dump(label_encoder, f)
+    
     master_data['illness'] = label_encoder.fit_transform(master_data['illness'])
+    with open('C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/Predict/label_encoder_illness.pkl', "wb") as f:
+        pickle.dump(label_encoder, f)
+    
     master_data['crop_illness'] = label_encoder.fit_transform(master_data['crop_illness'])
+    with open('C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/Predict/label_encoder_crop_illness.pkl', "wb") as f:
+        pickle.dump(label_encoder, f)
+    
     master_data.to_csv("DatasetBinary128.csv", mode='a', header=header, index=False)
     header = False
 
