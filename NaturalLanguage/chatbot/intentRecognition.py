@@ -28,6 +28,7 @@ X_train_tfidf, X_test_tfidf = tfidf_features(X_train, X_test, RESOURCE_PATH['TFI
 
 intent_recognizer = LogisticRegression(solver='lbfgs',penalty='l2',C=10,random_state=0,max_iter=400).fit(X_train_tfidf, y_train)
 
+
 # Check test accuracy.
 y_test_pred = intent_recognizer.predict(X_test_tfidf)
 test_accuracy = accuracy_score(y_test, y_test_pred)

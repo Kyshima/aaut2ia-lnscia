@@ -20,3 +20,18 @@ def text_prepare(text, stop_words):
         text = ' '.join([x for x in text.split() if x and x not in stopwords_set])
 
     return text.strip()
+
+
+RESOURCE_PATH = {
+    'INTENT_RECOGNIZER': 'intent_recognizer.pkl',
+    'TAG_CLASSIFIER': 'tag_classifier.pkl',
+    'TFIDF_VECTORIZER': 'tfidf_vectorizer.pkl',
+    'THREAD_EMBEDDINGS_FOLDER': 'thread_embeddings_by_tags',
+    'WORD_EMBEDDINGS': 'data/word_embeddings.tsv',
+}
+
+
+def unpickle_file(filename):
+    """Returns the result of unpickling the file content."""
+    with open(filename, 'rb') as f:
+        return pickle.load(f)

@@ -5,9 +5,7 @@ import yaml
 import os
 import json
 import sys
-
-sys.path.append('Final-Models/')
-
+from predict import *
 
 
 '''
@@ -96,7 +94,7 @@ print("Welcome! Type 'quit' to exit.")
 while True:
     user_input = input("You: ")
 
-    prepared_question = text_prepare(user_input)
+    prepared_question = text_prepare(user_input, '')
 
     features = tfidf_vectorizer.transform(np.array([prepared_question]))
 
@@ -118,7 +116,7 @@ while True:
 
         user_input = input("You: ")
 
-        response = 'Shit, that sounds serious af my brother!' #inserir tratamento dos modelos
+        response = generate_text('wheatyellowrust') #inserir tratamento dos modelos
         print("ChatBot:", response)
         if user_input.lower() == 'quit':
             break
