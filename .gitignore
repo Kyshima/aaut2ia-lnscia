@@ -13,3 +13,5 @@ MachineLearning/Dataset-Preparation/DatasetBinary128.csv
 NaturalLanguage/chatbot/data/dialogues.tsv
 NaturalLanguage/chatbot/data/tagged_posts.tsv
 NaturalLanguage/chatbot/data/crop_dialogue.csv
+NaturalLanguage/chatbotBERT/output
+NaturalLanguage/chatbotBERT/multi-class-logs

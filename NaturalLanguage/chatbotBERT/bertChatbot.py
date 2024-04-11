@@ -13,13 +13,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
-from keras.preprocessing import text
 import keras
 from keras.models import Sequential
 from keras.layers import Dense,Embedding,LSTM,Dropout
 from keras.callbacks import ReduceLROnPlateau
 
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 import nltk
 from nltk import word_tokenize
 from nltk.stem import PorterStemmer
@@ -62,7 +60,21 @@ def extract_json_info(json_file, df):
 
     return df
 
+def extract_df_info(df_info, df):
+    for pattern in df_info['visual_description']:
+        sentence_tag = [pattern, 'crop']
+        df.loc[len(df.index)] = sentence_tag
+
+    return df
+
+
+#Tags de preocupação com crops
+crop_dialogue_df = pd.read_csv('../chatbot/data/crop_dialogue.csv', sep=';')
+df = extract_df_info(crop_dialogue_df, df)
+
+#Tags de chitchat
 df = extract_json_info(intents, df)
+
 
 #Labeling
 df2 = df.copy()
@@ -160,3 +172,16 @@ trainer = Trainer(
 )
 
 trainer.train()
+
+
+model_path = "chatbot"
+trainer.save_model(model_path)
+tokenizer.save_pretrained(model_path)
+
+
+
+model = BertForSequenceClassification.from_pretrained(model_path)
+tokenizer= BertTokenizerFast.from_pretrained(model_path)
+chatbot= pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
+
+chatbot("My plant")
