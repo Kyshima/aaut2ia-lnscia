@@ -1,0 +1,37 @@
+<mat-drawer-container class="gfe-container">
+  <mat-drawer #drawer class="sidenav" mode="side" opened>
+    <div class="logo-details" style="text-align: center; min-height: 80px;cursor:pointer" (click)="HomePage()">
+      <span class="logo_name">Crop AI</span>
+    </div>
+    <div><button class="btn btn-primary" (click)="HomePage()"><i class="fa-solid fa-arrows-rotate w16"></i> Nova Imagem</button></div>
+    <div><button class="btn btn-primary" (click)="NavigateChatBot()"><i class="fa-solid fa-robot"></i> Chat Bot</button></div>
+  </mat-drawer>
+    <div class="main-page">
+      <router-outlet></router-outlet>
+    </div>
+</mat-drawer-container>
+
+<div class="modal-wrapper" *ngIf="confirmation==true">
+  <section class="modal" #modal>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title">Nova Comparação</h6>
+        <button type="button" class="modal-close" (click)="CloseModal()">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Ao iniciar uma nova comparação, a comparação atual será perdida. Deseja Continuar?</p>
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-primary" style="margin-right: 5px;" (click)="HomePage()">
+            <span aria-hidden="true">Sim</span>
+          </button>
+          <button type="button" class="btn btn-primary" (click)="CloseModal()">
+            <span aria-hidden="true">Nao</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="modal-overlay" #overlay (click)="CloseModal()"></div>
+</div>

@@ -1,0 +1,188 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+.helvetica{
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h1 {
+    color: var(--preto-72);
+}
+
+h2 {
+    color: var(--preto-50);
+}
+
+.horizontal-divider {
+    width: 90%;
+    border-bottom: 1px solid #d3d3d3;
+    margin: 15px 0;
+}
+
+.filedropZone {
+    height: 100%;
+    margin: auto;
+    border: 2px dotted lightgrey;
+    border-radius: var(--bs-border-radius-sm);
+}
+
+.filedropContent {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.center {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.div-center {
+   text-align: center;
+}
+
+.btn-primary:hover {
+    background-color: var(--vermelho-escuro);
+    color: rgba(255, 255, 255, 1);
+    transition: .2s;
+}
+
+.btn-primary {
+    background-color: var(--vermelho-sistrade);
+    color: rgba(255, 255, 255, .87);
+    border: none;
+    border-radius: var(--bs-border-radius-sm);
+    cursor: pointer;
+}
+
+.btn-primary:active {
+    background-color: var(--vermelho-mais-escuro) !important;;
+}
+
+.header {
+    text-align: center;
+    padding-top: 20px;
+    display:flex; 
+    flex-direction:column;
+    align-items: center;
+}
+
+.jcu-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: left;
+    border: rgb(227, 227, 227) 1px solid;
+    background-color: white;
+    border-radius: 0.3rem;
+    z-index: 2;
+    height: fit-content;
+    width: 30%;
+}
+
+.modal-content {
+    padding: 2px;
+}
+
+.modal-content {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0.3rem;
+    outline: 0;
+}
+
+.modal-header {
+    background-color: var(--color-primary);
+    color: white;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 0.5rem 0.5rem;
+}
+.modal-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    border-bottom: 1px solid #dee2e6;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+    background-color: rgba(216, 41, 45, 1);
+    color: white;
+}
+
+.modal-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1rem;
+}
+  
+.modal-close {
+    margin-right: 0.1rem;
+    background-color: transparent;
+    border: 0;
+    color:white;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.deleted {
+    color: red;
+    text-decoration: line-through;
+}
+
+.added {
+    color: var(--d2h-dark-ins-label-color);
+}
+
+.modified {
+    color: blue;
+}

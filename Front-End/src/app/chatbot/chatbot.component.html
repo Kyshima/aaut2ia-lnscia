@@ -1,0 +1,19 @@
+<div class="chatbot">
+    <header>
+      <h2 style="color: white">Chatbot</h2>
+      <span class="close-btn material-symbols-outlined">close</span>
+    </header>
+    <ul class="chatbox">
+      <li style="list-style-type: none" *ngFor="let message of messages; let i = index">
+        <div class="chat" [ngClass]="{ 'incoming': message.sender === 'Bot', 'outgoing': message.sender === 'You' }">
+          <span class="material-symbols-outlined" *ngIf="message.sender === 'Bot'"><i class="fa-solid fa-robot"></i></span>
+          <p [innerHTML]="message.content"></p>
+        </div>
+      </li>
+    </ul>
+    <div class="chat-input">
+      <textarea placeholder="Enter a message..." [(ngModel)]="userInput" spellcheck="false" required (keyup.enter)="sendMessage()"></textarea>
+      <span id="file-btn" class="material-symbols-rounded pr-2" (click)="attachFile()"><i class="fa-solid fa-paperclip"></i></span>
+      <span id="send-btn" class="material-symbols-rounded" (click)="sendMessage()" style="margin-left: 0.5rem"><i class="fa-solid fa-paper-plane"></i></span>
+    </div>
+  </div>
