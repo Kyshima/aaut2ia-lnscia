@@ -5,13 +5,15 @@ from keras.src.layers import Dropout
 from keras.src.optimizers import Adam
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from keras.models import Sequential
 from keras.layers import Embedding, LSTM, Dense
 from keras.preprocessing.sequence import pad_sequences
 import pickle
 from utils import *
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 if __name__ == "__main__":
     df = pd.read_csv("new.csv", sep=";")
@@ -62,7 +64,7 @@ if __name__ == "__main__":
     model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     # Train the model
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.8)
+    history = model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.8)
 
     # Evaluate the model on the test set
     y_pred = model.predict(X_test).argmax(axis=1)
@@ -89,16 +91,29 @@ if __name__ == "__main__":
     print(model.predict(X_padded))
     print(label_encoder.inverse_transform(model.predict(X_padded).argmax(axis=1)))
 
-    model.save("../../Final-Models/formality-model.h5")
+    # Confusion matrix
+    conf_matrix = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
+    plt.xlabel('Predicted labels')
+    plt.ylabel('True labels')
+    plt.title('Confusion Matrix')
+    plt.show()
 
-    with open("../../Final-Models/models/formality-model.pkl", "wb") as f:
-        pickle.dump(vectorizer, f)
+    # Plot the graph of accuracy versus epochs
+    plt.plot(history.history['accuracy'], label='Training Accuracy')
+    plt.plot(history.history['val_accuracy'], label='Test Accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.title('Training and Test Accuracy')
+    plt.legend()
+    plt.show()
 
-    with open("../../Final-Models/models/formality-model-vectorizer.pkl", "wb") as f:
-        pickle.dump(vectorizer, f)
-
-    with open("../../Final-Models/models/formality-model-encoder.pkl", "wb") as f:
-        pickle.dump(label_encoder, f)
-
-    with open("../../Final-Models/models/formality-model-sequence_length.pkl", "wb") as f:
-        pickle.dump(max_sequence_length, f)
+    # Plot the graph of loss versus epochs
+    plt.plot(history.history['loss'], label='Training Loss')
+    plt.plot(history.history['val_loss'], label='Test Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.title('Training and Test Loss')
+    plt.legend()
+    plt.show()

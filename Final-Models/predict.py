@@ -3,6 +3,7 @@ import tensorflow as tf
 import numpy as np
 from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
+from PIL import Image, ImageEnhance
 
 def predict_formality(text):
     with open("models/formality-model-vectorizer.pkl", "rb") as f:
@@ -98,5 +99,43 @@ if __name__ == "__main__":
     disease, treatment = predict_language("The wheat leaves display small, rusty-brown spots scattered across their surface.")
     print(disease)
     print(treatment)
+
+
+
+def load_image(image_path):
+    print(image_path)
+    image = Image.open(image_path)
+    image = image.resize((128, 128))
+    image_array = np.array(image)
+
+    color_enhancer = ImageEnhance.Color(image)
+    image = color_enhancer.enhance(10)
+
+    r, g, b = image.split()
+
+    factor = 0.7
+    g_less_strong = g.point(lambda x: int(x * factor))
+
+    image = Image.merge("RGB", (r, g_less_strong, b))
+
+    image_array = np.array(image)
+    image_array = image_array / 255.0
+    image_array = np.expand_dims(image_array, axis=0)
+    return image_array
+
+def predict_crop(image_path):
+    model_path = "models/crop3.h5"
+    label_encoder_path = "models/label_encoder_crop.pkl"
+
+    model = tf.keras.models.load_model(model_path)
+    label_encoder = pickle.load(open(label_encoder_path, "rb"))
+
+    image_array = load_image(image_path)
+
+    prediction = model.predict(image_array)
+    predicted_class = np.argmax(prediction)
+
+    crop = label_encoder.inverse_transform([predicted_class])[0]
+    return crop
 
 

@@ -45,8 +45,8 @@ if __name__ == "__main__":
 
     # Build GRU model
     num_classes = len(np.unique(y))
-    epochs = 10
-    batch_size = 32
+    epochs = 40
+    batch_size = 45
     learning_rate = 0.01
     embedding_dim = 100
     max_sequence_length = 100
@@ -57,8 +57,14 @@ if __name__ == "__main__":
     num_classes = len(np.unique(y))
     model = Sequential()
     model.add(Embedding(input_dim=len(vectorizer.get_feature_names_out()), output_dim=embedding_dim))
-    model.add(GRU(100))
-    model.add(Dropout(dropout_rate))
+    model.add(GRU(units=50, return_sequences=True))
+    model.add(Dropout(0.2))
+
+    model.add(GRU(units=125, return_sequences=True))
+    model.add(Dropout(0.15))
+
+    model.add(GRU(units=200))
+    model.add(Dropout(0.1))
     model.add(Dense(num_classes, activation='softmax'))
 
     # Compile the model
