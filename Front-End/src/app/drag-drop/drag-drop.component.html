@@ -28,7 +28,16 @@
 </div>
 
 <img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image">
-
+<div class="chatbot" *ngIf="answer != ''">
+  <ul class="chatbox">
+    <li style="list-style-type: none">
+      <div class="chat" class="chat incoming">
+        <span class="material-symbols-outlined"><i class="fa-solid fa-robot"></i></span>
+        <p>{{answer}}</p>
+      </div>
+    </li>
+  </ul>
+</div>
 <h1 style="display:flex; justify-content: center" *ngIf="answer != ''">{{answer}}</h1>
 
 <div class="modal-wrapper" *ngIf="showError==true">
