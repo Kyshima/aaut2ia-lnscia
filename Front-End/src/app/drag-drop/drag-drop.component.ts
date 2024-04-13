@@ -98,10 +98,10 @@ export class DragDropComponent {
       type: type
     };
     this.http.post<any>('http://127.0.0.1:5000/image-crop-predict', requestBody)
-        .subscribe(response => {
-          this.answer = response.crop
-        }, error => {
-          console.error('Error sending message:', error);
-        });
+      .subscribe(response => {
+        this.answer = response.crop.replace('___', ' - ').replace('_', ' ')
+      }, error => {
+        console.error('Error sending message:', error);
+      });
   }
 }
