@@ -54,13 +54,13 @@ h2 {
 }
 
 .btn-primary:hover {
-    background-color: var(--vermelho-escuro);
+    background-color: #05361b;
     color: rgba(255, 255, 255, 1);
     transition: .2s;
 }
 
 .btn-primary {
-    background-color: var(--vermelho-sistrade);
+    background-color: #025e2b;
     color: rgba(255, 255, 255, .87);
     border: none;
     border-radius: var(--bs-border-radius-sm);
@@ -68,7 +68,7 @@ h2 {
 }
 
 .btn-primary:active {
-    background-color: var(--vermelho-mais-escuro) !important;;
+    background-color: #05361b !important;;
 }
 
 .header {
@@ -149,7 +149,7 @@ h2 {
     border-bottom: 1px solid #dee2e6;
     border-top-left-radius: calc(0.3rem - 1px);
     border-top-right-radius: calc(0.3rem - 1px);
-    background-color: rgba(216, 41, 45, 1);
+    background-color: #a30000;
     color: white;
 }
 
@@ -184,5 +184,5 @@ h2 {
 }
 
 .modified {
-    color: blue;
+    color: #025e2b;
 }

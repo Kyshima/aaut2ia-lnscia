@@ -1,6 +1,7 @@
 <div class="header">
   <h1>Crop AI</h1>
-  <h2>Identificador de Crop e Illness</h2>
+  <h2>Crop and Illness Identifier
+  </h2>
 </div>
 
 <div class="panel helvetica">
@@ -9,19 +10,19 @@
       contentClassName="filedropContent">
       <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector" multiple="false">
         <div *ngIf="flag==true">
-          <p>Arraste para aqui uma imagem (jpg)</p>
-          <button type="button" class="btn-outline-secondary btn" (click)="openFileSelector()">Procurar</button>
+          <p>Drag a crop image (jpg)</p>
+          <button type="button" class="btn-outline-secondary btn" (click)="openFileSelector()">Search</button>
         </div>
         <div *ngIf="flag==false" class="file-droped">
           <p>{{ fileName }}</p>
-          <button type="button" class="btn-primary btn" (click)="deleteFile(0)">Apagar</button>
+          <button type="button" class="btn-primary btn" (click)="deleteFile(0)">Delete</button>
         </div>
       </ng-template>
     </ngx-file-drop>
   </div>
 </div>
 <div class="center">
-  <button class="btn-primary btn btn-lg" style="font-size: 100%;" (click)="compareFilesJcu()">Submeter</button>
+  <button class="btn-primary btn btn-lg" style="font-size: 100%;" (click)="compareFilesJcu()">Submit</button>
 </div>
 
 <img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image">
@@ -31,7 +32,7 @@
   <section class="modal" #modal>
     <div class="modal-content">
       <div class="modal-header">
-        <h6 class="modal-title">Erro a carregar os ficheiros</h6>
+        <h6 class="modal-title">Error Uploading File</h6>
         <button type="button" class="modal-close" (click)="CloseModal()">
           <span aria-hidden="true">×</span>
         </button>
