@@ -102,12 +102,11 @@ if __name__ == "__main__":
 
 
 
-def load_image(image_path):
-    print(image_path)
-    image = Image.open(image_path)
+def load_image(image):
+    image = Image.fromarray(np.array(image))
+    image = image.convert('RGB')
     image = image.resize((128, 128))
     image_array = np.array(image)
-
     color_enhancer = ImageEnhance.Color(image)
     image = color_enhancer.enhance(10)
 
@@ -123,14 +122,21 @@ def load_image(image_path):
     image_array = np.expand_dims(image_array, axis=0)
     return image_array
 
-def predict_crop(image_path):
-    model_path = "models/crop3.h5"
-    label_encoder_path = "models/label_encoder_crop.pkl"
+def predict_crop(image, type):
+    if(type == 1):
+        model_path = "models/crop2.h5"
+        label_encoder_path = "models/label_encoder_crop.pkl"
+    if(type == 2):
+        model_path = "models/illness3.h5"
+        label_encoder_path = "models/label_encoder_illness.pkl"
+    if (type == 3):
+        model_path = "models/crop_illness2.h5"
+        label_encoder_path = "models/label_encoder_crop_illness.pkl.pkl"
 
     model = tf.keras.models.load_model(model_path)
     label_encoder = pickle.load(open(label_encoder_path, "rb"))
 
-    image_array = load_image(image_path)
+    image_array = load_image(image)
 
     prediction = model.predict(image_array)
     predicted_class = np.argmax(prediction)

@@ -18,8 +18,9 @@ def get_language_prediction():
 def get_image_prediction():
     data = request.get_json()
 
-    path = data.get('path')
-    crop = predict_crop(path)
+    image = data.get('image')
+    type = 1
+    crop = predict_crop(image, type)
 
     return jsonify({'crop': crop})
 
