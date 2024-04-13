@@ -23,14 +23,12 @@ def load_image(image_path):
     image_array = np.expand_dims(image_array, axis=0)
     return image_array
 
-def predict_crop(image_path):
-    model_path = "C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/Final_Models/Models_Exported/crop3.h5"
+def predict_crop(image_array):
+    model_path = "C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop/Final_Models/Models_Exported/crop2.h5"
     label_encoder_path = "C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/Predict/label_encoder_crop.pkl"
 
     model = tf.keras.models.load_model(model_path)
     label_encoder = pickle.load(open(label_encoder_path, "rb"))
-
-    image_array = load_image(image_path)
 
     prediction = model.predict(image_array)
     predicted_class = np.argmax(prediction)
@@ -38,6 +36,41 @@ def predict_crop(image_path):
     crop = label_encoder.inverse_transform([predicted_class])[0]
     return crop
 
-image_path = "C:/Users/Diana/Desktop/00d8f10f-5038-4e0f-bb58-0b885ddc0cc5___RS_Early.B 8722.jpg"
-predicted_crop = predict_crop(image_path)
+def predict_illness(image_array):
+    model_path = "C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Illness/Final_Models/Models_Exported/illness3.h5"
+    label_encoder_path = "C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/Predict/label_encoder_illness.pkl"
+
+    model = tf.keras.models.load_model(model_path)
+    label_encoder = pickle.load(open(label_encoder_path, "rb"))
+
+    prediction = model.predict(image_array)
+    predicted_class = np.argmax(prediction)
+
+    illness = label_encoder.inverse_transform([predicted_class])[0]
+    return illness
+
+def predict_crop_illness(image_array):
+    model_path = "C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/NeuralNetwork/Crop_Illness/Final_Models/Models_Exported/crop_illness2.h5"
+    label_encoder_path = "C:/Users/Diana/Documents/aaut2ia-lnscia/MachineLearning/Predict/label_encoder_crop_illness.pkl"
+
+    model = tf.keras.models.load_model(model_path)
+    label_encoder = pickle.load(open(label_encoder_path, "rb"))
+
+    prediction = model.predict(image_array)
+    predicted_class = np.argmax(prediction)
+
+    crop_illness = label_encoder.inverse_transform([predicted_class])[0]
+    return crop_illness
+
+
+#"C:\Users\Diana\Desktop\DataSet\CropDisease\Crop___DIsease\Corn___Gray_Leaf_Spot\ff8671f5-09be-49d7-8093-2707c3a32489___RS_GLSp 4620_new30degFlipLR.JPG"
+
+image_path = "C:/Users/Diana/Desktop/DataSet/CropDisease/Crop___DIsease/Wheat___Brown_Rust/Brown_rust711.JPG"
+image_array = load_image(image_path)
+predicted_crop = predict_crop(image_array)
+predicted_illness = predict_illness(image_array)
+predicted_crop_illness = predict_crop_illness(image_array)
+
 print(predicted_crop)
+print(predicted_illness)
+print(predicted_crop_illness)
