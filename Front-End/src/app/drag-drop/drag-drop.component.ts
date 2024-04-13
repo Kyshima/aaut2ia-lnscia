@@ -21,7 +21,7 @@ export class DragDropComponent {
   public fileName: string = '';
   public flag: boolean = true;
   public image_array : number[][] = [];
-
+  public answer: string = ''
   public dropped(files: NgxFileDropEntry[],index:number) {
     if (files[0].fileEntry.isFile && this.isFileAllowed(files[0].fileEntry.name)) {
       const fileEntry = files[0].fileEntry as FileSystemFileEntry;
@@ -90,15 +90,16 @@ export class DragDropComponent {
     this.imageUrl = "";
   }
 
-  compareFilesJcu() {
+  compareFilesJcu(type: number) {
     if (this.image_array.length == 0) return;
 
     const requestBody = {
       image: this.image_array,
+      type: type
     };
     this.http.post<any>('http://127.0.0.1:5000/image-crop-predict', requestBody)
         .subscribe(response => {
-          console.log(response)
+          this.answer = response.crop
         }, error => {
           console.error('Error sending message:', error);
         });

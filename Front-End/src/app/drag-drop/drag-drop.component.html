@@ -22,11 +22,14 @@
   </div>
 </div>
 <div class="center">
-  <button class="btn-primary btn btn-lg" style="font-size: 100%;" (click)="compareFilesJcu()">Submit</button>
+  <button class="btn-primary btn btn-lg" style="font-size: 100%;margin: 15px;" (click)="compareFilesJcu(1)">Get Crop</button>
+  <button class="btn-primary btn btn-lg" style="font-size: 100%;margin: 15px;" (click)="compareFilesJcu(2)">Get Illness</button>
+  <button class="btn-primary btn btn-lg" style="font-size: 100%;margin: 15px;" (click)="compareFilesJcu(3)">Get Crop & Illness</button>
 </div>
 
 <img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image">
 
+<h1 style="display:flex; justify-content: center" *ngIf="answer != ''">{{answer}}</h1>
 
 <div class="modal-wrapper" *ngIf="showError==true">
   <section class="modal" #modal>
