@@ -1,0 +1,1342 @@
+{
+   "intents":[
+ {
+   "tag": "greeting",
+   "patterns": [
+      "Hi",
+      "How are you?",
+      "Is anyone there?",
+      "Hello",
+      "Good day",
+      "What's up",
+      "how are ya",
+      "heyy",
+      "whatsup",
+      "??? ??? ??"
+   ],
+   "responses": [
+      "Hello!",
+      "Good to see you again!",
+      "Hi there, how can I help?"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "goodbye",
+   "patterns": [
+      "cya",
+      "see you",
+      "bye bye",
+      "See you later",
+      "Goodbye",
+      "I am Leaving",
+      "Bye",
+      "Have a Good day",
+      "talk to you later",
+      "ttyl",
+      "i got to go",
+      "gtg"
+   ],
+   "responses": [
+      "Sad to see you go :(",
+      "Talk to you later",
+      "Goodbye!",
+      "Come back soon"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "creator",
+   "patterns": [
+      "what is the name of your developers",
+      "what is the name of your creators",
+      "what is the name of the developers",
+      "what is the name of the creators",
+      "who created you",
+      "your developers",
+      "your creators",
+      "who are your developers",
+      "developers",
+      "you are made by",
+      "you are made by whom",
+      "who created you",
+      "who create you",
+      "creators",
+      "who made you",
+      "who designed you"
+   ],
+   "responses": [
+      "College students"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "name",
+   "patterns": [
+      "name",
+      "your name",
+      "do you have a name",
+      "what are you called",
+      "what is your name",
+      "what should I call you",
+      "whats your name?",
+      "what are you",
+      "who are you",
+      "who is this",
+      "what am i chatting to",
+      "who am i taking to",
+      "what are you"
+   ],
+   "responses": [
+      "You can call me Doctor Crop AI.",
+      "I'm Doctor Crop AI",
+      "I am a Chatbot.",
+      "I am your helper"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "hours",
+   "patterns": [
+      "working days",
+      "when can i ask you questions",
+      "what are your hours",
+      "hours of operation",
+      "do you work on saturday",
+      "tell something about your working hours",
+      "timing work"
+   ],
+   "responses": [
+      "I am available 24 hours a day!",
+      "I'm open 24-7 for all your questions!",
+      "My availability for your questions is constant."
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "number",
+   "patterns": [
+      "more info",
+      "contact info",
+      "how to contact college",
+      "college telephone number",
+      "college number",
+      "What is your contact no",
+      "Contact number?",
+      "how to call you",
+      "Your phone no?",
+      "how can i contact you",
+      "Can i get your phone number",
+      "how can i call you",
+      "phone number",
+      "phone no",
+      "call"
+   ],
+   "responses": [
+      "I dont have a contact number, but you can contact find contacts for my creators in: https://grupo6meia.wixsite.com/grupo-6"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "random",
+   "patterns": [
+      "I love you",
+      "Will you marry me",
+      "Do you love me",
+      "Will you go out with me",
+      "Can we date"
+   ],
+   "responses": [
+      "I am not programmed for this, please ask appropriate questions"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "swear",
+   "patterns": [
+      "fuck",
+      "bitch",
+      "shut up",
+      "hell",
+      "stupid",
+      "idiot",
+      "dumb ass",
+      "asshole",
+      "fucker"
+   ],
+   "responses": [
+      "please use appropriate language",
+      "Maintaining decency would be appreciated"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "sports",
+   "patterns": [
+      "sports and games",
+      "give sports details",
+      "sports infrastructure",
+      "sports facilities",
+      "information about sports",
+      "Sports activities",
+      "please provide sports and games information"
+   ],
+   "responses": [
+      "Sports are great!",
+      "You should pratice sports, they are good for everyone!",
+      "I like sports a lot!"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "salutation",
+   "patterns": [
+      "okk",
+      "okie",
+      "nice work",
+      "well done",
+      "good job",
+      "thanks for the help",
+      "Thank You",
+      "its ok",
+      "Thanks",
+      "Good work",
+      "k",
+      "ok",
+      "okay"
+   ],
+   "responses": [
+      "I am glad I helped you",
+      "welcome, anything else i can assist you with?"
+   ],
+   "context_set": ""
+},
+ {
+   "tag": "task",
+   "patterns": [
+      "what can you do",
+      "what are the thing you can do",
+      "things you can do",
+      "what can u do for me",
+      "how u can help me",
+      "why i should use you"
+   ],
+   "responses": [
+      "I can answer to low-intermediate questions regarding crop diseases",
+      "You can ask me questions regarding crop diseases, and i will try to answer them"
+   ],
+   "context_set": ""
+},
+   {
+     "tag": "family",
+     "patterns": [
+        "Who is your father",
+        "Who is your mother",
+        "your boss",
+        "Do you have any brothers"
+     ],
+     "responses": [
+        "I might. You could say that every bot built using my engine is my family"
+     ],
+     "context_set": ""
+  },
+   {
+     "tag": "weather",
+     "patterns": [
+        "What's the weather like today?",
+        "Is it going to rain?",
+        "What's the forecast?",
+        "Weather report",
+        "Temperature today",
+        "Weather update",
+        "Is it sunny outside?",
+        "Will it be hot today?"
+     ],
+     "responses": [
+        "Let me check the weather for you...",
+        "Checking the weather forecast...",
+        "The current weather is...",
+        "Here's the weather update...",
+        "The forecast predicts..."
+     ],
+     "context_set": ""
+  },
+     {
+    "tag": "location",
+    "patterns": [
+      "Where are you located?",
+      "What's your address?",
+      "Where can I find you?",
+      "Location please",
+      "Where do you operate from?"
+    ],
+    "responses": [
+      "I exist in the virtual realm.",
+      "I don't have a physical location as I am a digital entity.",
+      "You can access me from anywhere with an internet connection."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "help",
+    "patterns": [
+      "Help me",
+      "I need assistance",
+      "Can you help?",
+      "Help please",
+      "Assistance required"
+    ],
+    "responses": [
+      "Of course, what do you need help with?",
+      "I'm here to assist you. What's the issue?",
+      "How can I assist you today?",
+      "Tell me what you need help with."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "feedback",
+    "patterns": [
+      "I have feedback",
+      "Feedback for you",
+      "Feedback",
+      "Can I give feedback?",
+      "Opinion about your service"
+    ],
+    "responses": [
+      "We appreciate your feedback. Please share it with us.",
+      "Your feedback is valuable to us. Feel free to share.",
+      "We're open to hearing your feedback. Please let us know.",
+      "Feedback helps us improve. Please provide yours."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "order_status",
+    "patterns": [
+      "Where's my order?",
+      "Check my order status",
+      "Order update",
+      "Tracking my order",
+      "Has my order shipped?"
+    ],
+    "responses": [
+      "Let me check the status of your order for you.",
+      "Please provide your order details, and I'll check its status.",
+      "Checking the status of your order...",
+      "Your order status will be updated shortly."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "technical_support",
+    "patterns": [
+      "Technical issue",
+      "I'm facing a problem",
+      "Tech support needed",
+      "Help with technical problem",
+      "Fix my issue"
+    ],
+    "responses": [
+      "I'm here to help with technical problems. Please describe the issue.",
+      "Let's resolve your technical problem together. What seems to be the issue?",
+      "Technical support is available. Please explain the problem you're experiencing.",
+      "I'll do my best to assist you with your technical issue. Please provide details."
+    ],
+    "context_set": ""
+  },{
+    "tag": "pricing",
+    "patterns": [
+      "How much does it cost?",
+      "What's the price?",
+      "Pricing information",
+      "Cost",
+      "Price please"
+    ],
+    "responses": [
+      "The pricing varies depending on the product/service. Can you specify what you're interested in?",
+      "Please provide more details so I can give you an accurate pricing estimate.",
+      "For pricing details, please specify the product/service you're inquiring about.",
+      "Pricing information is available upon request. What would you like to know the price of?",
+      "To provide pricing information, I need more details. What are you interested in?"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "availability",
+    "patterns": [
+      "Is it available?",
+      "Availability",
+      "In stock?",
+      "Do you have it?",
+      "Can I buy it now?"
+    ],
+    "responses": [
+      "Let me check the availability for you.",
+      "Checking availability...",
+      "Availability status is being verified.",
+      "I'll find out if it's available. Please wait a moment.",
+      "Availability information coming up shortly."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "delivery",
+    "patterns": [
+      "Delivery options",
+      "When will it be delivered?",
+      "Delivery time",
+      "Delivery details",
+      "Can you deliver?"
+    ],
+    "responses": [
+      "I can provide information about delivery options. What do you need?",
+      "Delivery details depend on the product/service. Please specify what you're interested in.",
+      "Delivery time varies based on location and product. Can you provide more details?",
+      "For delivery information, I'll need more details. What are you interested in having delivered?",
+      "Let me gather information about delivery options for you."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "returns",
+    "patterns": [
+      "Return policy",
+      "How do I return?",
+      "Return process",
+      "Can I return it?",
+      "Refund policy"
+    ],
+    "responses": [
+      "Return policies may vary. Can you specify what you're considering returning?",
+      "I can provide details about our return policy. What would you like to know?",
+      "Return processes differ depending on the product/service. Can you provide more details?",
+      "For information about returns, please specify the item you're considering returning.",
+      "Let me provide you with information about our return policy."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "product_info",
+    "patterns": [
+      "Product details",
+      "Tell me about the product",
+      "What does it include?",
+      "Features",
+      "Specifications"
+    ],
+    "responses": [
+      "I can provide information about the product. What specifically would you like to know?",
+      "Product details vary depending on the item. Can you specify what you're interested in?",
+      "For details about the product, please specify which item you're referring to.",
+      "Let me gather information about the product for you.",
+      "Product information is available. What do you need to know?"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "order_placement",
+    "patterns": [
+      "How do I place an order?",
+      "Can I order now?",
+      "Order process",
+      "How to buy?",
+      "Place order"
+    ],
+    "responses": [
+      "I can guide you through the order placement process. Would you like assistance?",
+      "Order placement processes may vary depending on the product/service. Can you provide more details?",
+      "To place an order, I'll need more information. What are you interested in ordering?",
+      "Let me explain how to place an order.",
+      "Order placement information coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "account_management",
+    "patterns": [
+      "How do I manage my account?",
+      "Account settings",
+      "Edit profile",
+      "Change password",
+      "Account management"
+    ],
+    "responses": [
+      "I can assist you with managing your account. What specifically would you like to do?",
+      "Account management options may vary. Can you specify what you'd like assistance with?",
+      "To manage your account, I'll need more details. What specifically are you trying to do?",
+      "Let me explain how to manage your account.",
+      "Account management assistance is available. What do you need help with?"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "discounts",
+    "patterns": [
+      "Are there any discounts?",
+      "Promotions",
+      "Special offers",
+      "Discount codes",
+      "Coupon codes"
+    ],
+    "responses": [
+      "Discounts and promotions may be available. Can you specify what you're interested in?",
+      "I can provide information about current discounts and promotions. What specifically are you looking for?",
+      "For details about discounts, please specify what you're interested in purchasing.",
+      "Let me check for any available discounts for you.",
+      "Discount information coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "billing",
+    "patterns": [
+      "Billing inquiries",
+      "Payment methods",
+      "Invoice details",
+      "Payment options",
+      "Billing questions"
+    ],
+    "responses": [
+      "I can provide information about billing. What specifically would you like to know?",
+      "Billing inquiries may vary depending on the situation. Can you provide more details?",
+      "For billing details, please specify what you're inquiring about.",
+      "Let me assist you with your billing inquiries.",
+      "Billing information coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "customization",
+    "patterns": [
+      "Customization options",
+      "Personalization",
+      "Can I customize?",
+      "Tailored solutions",
+      "Customized services"
+    ],
+    "responses": [
+      "Customization options may be available. Can you specify what you're interested in customizing?",
+      "I can provide information about customization options. What specifically are you looking to customize?",
+      "For details about customization, please specify what you're interested in.",
+      "Let me check for available customization options for you.",
+      "Customization information coming right up."
+    ],
+    "context_set": ""
+  },{
+    "tag": "fun_fact",
+    "patterns": [
+      "Tell me a fun fact",
+      "Fun fact",
+      "Give me an interesting fact",
+      "Share a trivia",
+      "Fun trivia"
+    ],
+    "responses": [
+      "Did you know that honey never spoils?",
+      "Here's a fun fact: The shortest war in history lasted only 38 minutes.",
+      "A fun fact for you: Cows have best friends.",
+      "Did you know that the Eiffel Tower can be 15 cm taller during the summer?",
+      "Here's an interesting fact: Octopuses have three hearts."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "joke",
+    "patterns": [
+      "Tell me a joke",
+      "Joke please",
+      "Make me laugh",
+      "Share a funny joke",
+      "I need a laugh"
+    ],
+    "responses": [
+      "Why couldn't the bicycle stand up by itself? It was two-tired!",
+      "What do you call fake spaghetti? An impasta!",
+      "Why don't skeletons fight each other? They don't have the guts!",
+      "Why did the scarecrow win an award? Because he was outstanding in his field!",
+      "What's orange and sounds like a parrot? A carrot!"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "quote",
+    "patterns": [
+      "Give me a quote",
+      "Quote of the day",
+      "Famous quote",
+      "Inspirational quote",
+      "Share a saying"
+    ],
+    "responses": [
+      "The only way to do great work is to love what you do. - Steve Jobs",
+      "Life is what happens when you're busy making other plans. - John Lennon",
+      "In the end, it's not the years in your life that count. It's the life in your years. - Abraham Lincoln",
+      "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+      "Success is not final, failure is not fatal: It is the courage to continue that counts. - Winston Churchill"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "fact_check",
+    "patterns": [
+      "Is it true that",
+      "Fact check",
+      "Verify this information",
+      "Confirm if",
+      "Is this statement correct?"
+    ],
+    "responses": [
+      "Let me verify that information for you.",
+      "I'll fact-check that for you. One moment, please.",
+      "I'll confirm the accuracy of that statement. Please wait a moment.",
+      "Fact-checking in progress...",
+      "I'll make sure to provide you with accurate information."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "conversation_starter",
+    "patterns": [
+      "Tell me something interesting",
+      "Start a conversation",
+      "Can we chat?",
+      "Engage me",
+      "Entertain me"
+    ],
+    "responses": [
+      "Did you know that the shortest war in history lasted only 38 minutes?",
+      "Let's chat! How about we discuss your favorite hobby?",
+      "How about we play a game of 'Would you rather?'",
+      "What's your favorite book or movie?",
+      "What's the most interesting place you've ever visited?"
+    ],
+    "context_set": ""
+  },
+     {
+    "tag": "recipe_search",
+    "patterns": [
+      "Find me a recipe for",
+      "I need a recipe for",
+      "Recipe search",
+      "Cooking ideas for",
+      "Looking for a recipe"
+    ],
+    "responses": [
+      "Sure, let me find a recipe for you.",
+      "I can help you find a recipe. What dish are you interested in?",
+      "Let's search for a recipe together. What type of cuisine are you in the mood for?",
+      "I'll find you a recipe. What ingredients or cuisine are you interested in?"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "ingredient_substitution",
+    "patterns": [
+      "Ingredient substitution"
+    ],
+    "responses": [
+      "Certainly, let me suggest some alternatives for you.",
+      "I can help you find a substitute. What ingredient are you looking to replace?",
+      "Let's find a suitable replacement together. What ingredient do you need to substitute?",
+      "I'll suggest some alternative ingredients. What item are you looking to replace?"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "cooking_techniques",
+    "patterns": [
+      "Cooking techniques for",
+      "Can you teach me how to",
+      "How to cook",
+      "Cooking methods"
+    ],
+    "responses": [
+      "Sure, I can explain that cooking technique. What specific method are you interested in learning about?",
+      "Let me teach you how to master that cooking technique. What dish are you planning to cook?",
+      "I can help you with that cooking method. What recipe are you working on?",
+      "I'll guide you through the process. What dish would you like to learn to cook?",
+      "Cooking techniques can vary depending on the dish. What specific method do you need assistance with?"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "meal_planning",
+    "patterns": [
+      "Plan my meals for",
+      "Meal planning",
+      "Create a menu for",
+      "Weekly meal prep",
+      "What should I cook for"
+    ],
+    "responses": [
+      "Let's plan your meals together. What type of cuisine or dietary preferences do you have?",
+      "I can help you create a meal plan. Are there any dietary restrictions or preferences I should consider?",
+      "Meal planning can be fun! What types of dishes do you enjoy?",
+      "I'll assist you with meal planning. How many meals and servings do you need?",
+      "Meal planning is essential for a well-balanced diet. What types of meals are you looking to plan?"
+    ],
+    "context_set": ""
+  },
+     {
+    "tag": "sports_news",
+    "patterns": [
+      "Sports news",
+      "Latest sports updates",
+      "What's happening in sports?",
+      "Any sports headlines?",
+      "Tell me about sports events"
+    ],
+    "responses": [
+      "Sure, let me provide you with the latest sports news.",
+      "I can give you updates on the latest sports events. What sport are you interested in?",
+      "Let's catch up on the latest sports news together.",
+      "I'll share some sports headlines with you.",
+      "Sports events and news coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "sports_scores",
+    "patterns": [
+      "Sports scores",
+      "Current game scores",
+      "What are the latest scores?",
+      "Score updates",
+      "Tell me the score of the game"
+    ],
+    "responses": [
+      "Sure, let me check the latest scores for you.",
+      "I can provide you with live score updates. Which game are you interested in?",
+      "Let's find out the current scores together.",
+      "I'll get you the latest scores. What sport are you following?",
+      "Live score updates coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "athlete_info",
+    "patterns": [
+      "Athlete information",
+      "Tell me about an athlete",
+      "Athlete profile",
+      "Learn about famous athletes",
+      "Who is the best athlete?"
+    ],
+    "responses": [
+      "Sure, let me provide you with information about a famous athlete.",
+      "I can give you details about a renowned athlete. Who would you like to learn about?",
+      "Let's explore the profile of a famous athlete together.",
+      "I'll share some information about a notable athlete. Any specific athlete in mind?",
+      "Athlete profiles coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "sports_analysis",
+    "patterns": [
+      "Sports analysis",
+      "Game analysis",
+      "Match breakdown",
+      "Sports statistics",
+      "Analysis of sports performance"
+    ],
+    "responses": [
+      "Sure, let's analyze the game together.",
+      "I can provide you with a breakdown of the match. Which game are you interested in?",
+      "Let's delve into the sports statistics and analyze the performance.",
+      "I'll analyze the sports performance for you. What sport would you like to analyze?",
+      "Sports analysis coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "sports_discussion",
+    "patterns": [
+      "Sports discussion",
+      "Talk about sports",
+      "Sports debate",
+      "Favorite sports teams",
+      "Sports opinions"
+    ],
+    "responses": [
+      "Sure, let's discuss sports. What's on your mind?",
+      "I'm up for a sports discussion. What topics would you like to cover?",
+      "Let's have a sports debate. What are your thoughts on the latest games?",
+      "I'll join you for a sports conversation. What sports teams do you support?",
+      "Sports discussion starting now."
+    ],
+    "context_set": ""
+  },
+     {
+    "tag": "destination_info",
+    "patterns": [
+      "Destination details"
+    ],
+    "responses": [
+      "Sure, let me provide you with information about that destination.",
+      "I can give you details about that place. What destination are you interested in?",
+      "Let's explore the details of that destination together.",
+      "I'll share some information about that place. Any specific details you're looking for?",
+      "Destination information coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "travel_tips",
+    "patterns": [
+      "Travel tips",
+      "Travel advice",
+      "Helpful travel tips",
+      "Traveling hacks",
+      "Travel essentials"
+    ],
+    "responses": [
+      "Sure, here are some helpful travel tips",
+      "I have some useful travel advice for you",
+      "Let me share some traveling hacks with you",
+      "Here are some travel tips to make your trip smoother",
+      "I'll provide you with some essential travel advice"
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "travel_recommendations",
+    "patterns": [
+      "Travel recommendations",
+      "Recommended destinations",
+      "Where should I travel?",
+      "Travel suggestions",
+      "Top travel destinations"
+    ],
+    "responses": [
+      "Sure, let me recommend some travel destinations for you.",
+      "I can suggest some destinations based on your preferences. What type of travel are you interested in?",
+      "Let's explore some travel recommendations together.",
+      "I'll provide you with some travel suggestions. What kind of destination are you looking for?",
+      "Travel recommendations coming right up."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "trip_planning",
+    "patterns": [
+      "Trip planning",
+      "Plan my trip",
+      "Help me plan my vacation",
+      "Vacation planning",
+      "Itinerary planning"
+    ],
+    "responses": [
+      "Sure, let's plan your trip together. Where are you planning to go?",
+      "I can help you create an itinerary for your vacation. What destinations are you considering?",
+      "Let's work on your trip planning. What activities do you want to include?",
+      "I'll assist you with planning your vacation. What are your travel preferences?",
+      "Trip planning starting now."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "travel_experience",
+    "patterns": [
+      "Share your travel experience",
+      "Tell me about your trip",
+      "Travel stories",
+      "Memorable travel moments",
+      "Favorite travel destinations"
+    ],
+    "responses": [
+      "Sure, let me share some of my travel experiences with you",
+      "I have some interesting travel stories to tell",
+      "Let me share some memorable travel moments with you",
+      "Here are some of my favorite travel destinations",
+      "I'll provide you with insights from my travel experiences"
+    ],
+    "context_set": ""
+  },
+     {
+    "tag": "deep_learning_basics",
+    "patterns": [
+      "What is deep learning?",
+      "Basics of deep learning",
+      "Introduction to deep learning",
+      "Deep learning explained",
+      "Overview of deep learning"
+    ],
+    "responses": [
+      "Deep learning is a subset of machine learning that uses neural networks with multiple layers to learn complex patterns in large amounts of data.",
+      "In deep learning, artificial neural networks with multiple layers (deep neural networks) are used to model and learn complex relationships in data.",
+      "Deep learning is a type of machine learning that involves algorithms inspired by the structure and function of the brain's neural networks.",
+      "Deep learning is a branch of artificial intelligence that focuses on learning representations of data through neural networks with multiple layers.",
+      "Deep learning is a powerful tool for tasks such as image recognition, natural language processing, and speech recognition, among others."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "neural_networks",
+    "patterns": [
+      "What are neural networks?",
+      "Neural network basics",
+      "Introduction to neural networks",
+      "How do neural networks work?",
+      "Neural network architecture"
+    ],
+    "responses": [
+      "Neural networks are computing systems inspired by the structure and function of the human brain's interconnected neurons.",
+      "A neural network is a series of algorithms that endeavors to recognize underlying relationships in a set of data through a process that mimics the way the human brain operates.",
+      "Neural networks consist of interconnected nodes (neurons) that process information by passing signals through the network.",
+      "Neural networks work by processing input data through layers of interconnected neurons, with each layer transforming the data to learn representations.",
+      "The architecture of a neural network refers to its structure, including the number of layers, the number of neurons in each layer, and the connections between neurons."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "deep_learning_applications",
+    "patterns": [
+      "Applications of deep learning",
+      "Deep learning uses",
+      "What is deep learning used for?",
+      "Deep learning in real life",
+      "Practical applications of deep learning"
+    ],
+    "responses": [
+      "Deep learning is used in various fields, including computer vision, natural language processing, speech recognition, healthcare, finance, and autonomous vehicles.",
+      "Some applications of deep learning include image recognition, object detection, machine translation, sentiment analysis, and recommendation systems.",
+      "In real life, deep learning is applied in industries such as healthcare for disease diagnosis, finance for fraud detection, and marketing for personalized recommendations.",
+      "Deep learning techniques are utilized in developing autonomous vehicles for tasks such as object detection, lane tracking, and decision making.",
+      "Practical applications of deep learning extend to areas such as robotics, gaming, virtual assistants, and industrial automation."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "deep_learning_frameworks",
+    "patterns": [
+      "Deep learning frameworks",
+      "Popular deep learning libraries",
+      "Tools for deep learning",
+      "Which deep learning framework to use?",
+      "Deep learning software"
+    ],
+    "responses": [
+      "Popular deep learning frameworks include TensorFlow, PyTorch, Keras, Caffe, and Theano, among others.",
+      "Deep learning libraries provide pre-built tools and algorithms for building and training neural networks, making it easier to implement deep learning models.",
+      "The choice of deep learning framework depends on factors such as ease of use, community support, performance, and compatibility with existing infrastructure.",
+      "Deep learning software tools offer a range of features such as neural network design, training, optimization, and deployment for various applications.",
+      "Frameworks like TensorFlow and PyTorch are widely used for their flexibility, scalability, and extensive community support in the deep learning community."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "deep_learning_advancements",
+    "patterns": [
+      "Advancements in deep learning",
+      "Latest developments in deep learning",
+      "Deep learning research",
+      "Cutting-edge deep learning techniques",
+      "Recent breakthroughs in deep learning"
+    ],
+    "responses": [
+      "Recent advancements in deep learning include improvements in model architectures, training algorithms, and application areas.",
+      "The field of deep learning is continuously evolving, with researchers developing new techniques and algorithms to push the boundaries of what's possible.",
+      "Cutting-edge research in deep learning focuses on areas such as self-supervised learning, reinforcement learning, generative models, and attention mechanisms.",
+      "Recent breakthroughs in deep learning have led to significant progress in tasks such as image generation, language understanding, and robotic control.",
+      "Stay updated with the latest developments in deep learning by following research papers, conferences, and online communities dedicated to the field."
+    ],
+    "context_set": ""
+  },
+     {
+    "tag": "lstm_basics",
+    "patterns": [
+      "What is LSTM?",
+      "Introduction to LSTM",
+      "LSTM basics",
+      "How do LSTM networks work?",
+      "Overview of LSTM"
+    ],
+    "responses": [
+      "Long Short-Term Memory (LSTM) is a type of recurrent neural network (RNN) architecture designed to learn long-term dependencies in sequential data.",
+      "LSTM networks are capable of retaining information over long periods, making them well-suited for tasks such as time series prediction, speech recognition, and natural language processing.",
+      "In LSTM networks, special memory cells and gates regulate the flow of information, allowing them to remember past inputs and selectively update their state.",
+      "LSTM networks address the vanishing gradient problem of traditional RNNs by introducing gates that control the flow of information and mitigate the issue of gradient decay.",
+      "LSTM networks excel in capturing patterns in sequential data with long-range dependencies, making them popular in various applications such as text generation, music composition, and sentiment analysis."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "lstm_structure",
+    "patterns": [
+      "Structure of LSTM",
+      "Components of LSTM",
+      "LSTM architecture",
+      "LSTM layers",
+      "Anatomy of LSTM"
+    ],
+    "responses": [
+      "LSTM networks consist of memory cells, input gates, forget gates, and output gates, each responsible for different aspects of information processing.",
+      "The memory cell in an LSTM network stores information over time, while the input gate regulates the flow of new information into the cell.",
+      "Forget gates in LSTM networks determine which information to discard from the memory cell, preventing the network from being overwhelmed by irrelevant data.",
+      "Output gates control the flow of information from the memory cell to the output of the LSTM network, allowing it to selectively expose relevant information.",
+      "LSTM layers can be stacked to form deeper architectures, enabling the network to learn hierarchical representations of sequential data."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "lstm_applications",
+    "patterns": [
+      "Applications of LSTM",
+      "LSTM uses",
+      "What is LSTM used for?",
+      "LSTM in real life",
+      "Practical applications of LSTM"
+    ],
+    "responses": [
+      "LSTM networks are used in various fields, including natural language processing, speech recognition, time series forecasting, and financial modeling.",
+      "Some applications of LSTM include language translation, sentiment analysis, chatbots, recommendation systems, and handwriting recognition.",
+      "In real life, LSTM networks are employed in virtual assistants, predictive text input, medical diagnosis, anomaly detection, and weather forecasting.",
+      "LSTM techniques are utilized in developing predictive models for stock market analysis, sales forecasting, energy consumption prediction, and demand forecasting.",
+      "Practical applications of LSTM extend to areas such as autonomous vehicles, medical imaging, protein structure prediction, and drug discovery."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "lstm_training",
+    "patterns": [
+      "Training LSTM networks",
+      "How to train LSTM?",
+      "LSTM training process",
+      "Training data for LSTM",
+      "Optimizing LSTM performance"
+    ],
+    "responses": [
+      "Training LSTM networks involves feeding sequential data into the network and adjusting the model parameters to minimize prediction errors.",
+      "LSTM networks are trained using backpropagation through time (BPTT), which involves updating the weights of the network based on error gradients calculated over time steps.",
+      "The training process for LSTM networks requires careful selection of hyperparameters, such as learning rate, batch size, and sequence length, to optimize performance.",
+      "Training data for LSTM networks typically consists of input sequences paired with corresponding target sequences, allowing the network to learn to predict future values.",
+      "To optimize LSTM performance, techniques such as gradient clipping, dropout regularization, and adaptive learning rate scheduling are commonly employed."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "lstm_variants",
+    "patterns": [
+      "Variants of LSTM",
+      "Types of LSTM networks",
+      "Different versions of LSTM",
+      "Modified LSTM architectures",
+      "LSTM extensions"
+    ],
+    "responses": [
+      "Several variants of LSTM have been proposed, including Gated Recurrent Units (GRU), Bidirectional LSTM, Peephole LSTM, and Attention-based LSTM.",
+      "Gated Recurrent Units (GRU) are a simplified version of LSTM with fewer parameters, making them computationally more efficient.",
+      "Bidirectional LSTM networks process input sequences in both forward and backward directions, allowing them to capture contextual information from past and future inputs.",
+      "Peephole LSTM networks enhance traditional LSTM architectures by allowing the gates to peek at the cell state, improving their ability to model long-term dependencies.",
+      "Attention-based LSTM networks incorporate attention mechanisms to dynamically focus on relevant parts of the input sequence, improving their performance in tasks such as machine translation and image captioning."
+    ],
+    "context_set": ""
+  },
+     {
+    "tag": "chatbot_basics",
+    "patterns": [
+      "What is a chatbot?",
+      "Basics of chatbot development",
+      "Introduction to chatbots",
+      "Chatbot explained",
+      "Overview of chatbot technology"
+    ],
+    "responses": [
+      "A chatbot is a software application designed to simulate conversation with human users, typically through text or voice interactions.",
+      "Chatbot development involves creating algorithms and models that enable the chatbot to understand user input, generate appropriate responses, and maintain context during the conversation.",
+      "In chatbot development, various techniques such as natural language processing (NLP), machine learning, and rule-based systems are used to build intelligent conversational agents.",
+      "Chatbots can be deployed on websites, messaging platforms, mobile apps, and voice assistants, providing users with personalized assistance, information retrieval, and task automation.",
+      "The field of chatbot technology is rapidly evolving, with advancements in AI, NLP, and conversational UX shaping the development of more sophisticated and user-friendly chatbots."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "chatbot_architecture",
+    "patterns": [
+      "Chatbot architecture",
+      "Components of chatbots",
+      "Chatbot system design",
+      "Anatomy of a chatbot",
+      "Chatbot infrastructure"
+    ],
+    "responses": [
+      "The architecture of a chatbot typically consists of several key components, including the user interface, messaging platform integration, NLP engine, dialogue manager, and backend services.",
+      "The user interface of a chatbot allows users to interact with the system, usually through text input fields, buttons, or voice commands.",
+      "Messaging platform integration enables the chatbot to communicate with users on platforms such as Facebook Messenger, Slack, WhatsApp, or custom web interfaces.",
+      "The NLP engine of a chatbot processes user input to extract meaning, understand intent, and identify entities, using techniques such as tokenization, part-of-speech tagging, and named entity recognition.",
+      "The dialogue manager coordinates the conversation flow, managing context, handling user queries, and generating appropriate responses based on the current state of the conversation and user intent."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "chatbot_development_tools",
+    "patterns": [
+      "Chatbot development tools",
+      "Tools for building chatbots",
+      "Popular chatbot platforms",
+      "Which chatbot framework to use?",
+      "Chatbot SDKs"
+    ],
+    "responses": [
+      "Popular chatbot development tools include Dialogflow, Microsoft Bot Framework, IBM Watson Assistant, Rasa, and Amazon Lex, among others.",
+      "Chatbot platforms provide pre-built components, APIs, and developer tools for building, deploying, and managing chatbots across various channels and platforms.",
+      "The choice of chatbot framework depends on factors such as programming language preferences, platform support, scalability, and integration capabilities with existing systems.",
+      "Chatbot SDKs (Software Development Kits) offer libraries, APIs, and documentation for developers to build custom chatbots using programming languages such as Python, JavaScript, or Java.",
+      "Frameworks like Dialogflow and Rasa offer natural language understanding (NLU) capabilities, intent recognition, entity extraction, and context management for building conversational AI applications."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "chatbot_integration",
+    "patterns": [
+      "Chatbot integration",
+      "Integrating chatbots with...",
+      "How to integrate chatbots?",
+      "Connecting chatbots to...",
+      "Chatbot deployment"
+    ],
+    "responses": [
+      "Chatbots can be integrated with various platforms and systems, including websites, mobile apps, messaging apps, social media platforms, CRM systems, and backend databases.",
+      "Integrating chatbots with existing systems often involves using APIs, webhooks, or custom middleware to exchange data and trigger actions based on user interactions.",
+      "The deployment of chatbots can be done on cloud platforms such as AWS, Google Cloud, or Microsoft Azure, using containerization technologies like Docker or serverless computing platforms like AWS Lambda or Google Cloud Functions.",
+      "Chatbots can be deployed as standalone applications or integrated into existing workflows to streamline customer support, sales, marketing, and other business processes.",
+      "The integration of chatbots with other systems allows organizations to automate repetitive tasks, provide instant support to customers, and improve operational efficiency."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "chatbot_best_practices",
+    "patterns": [
+      "Chatbot best practices",
+      "Tips for building chatbots",
+      "Chatbot development guidelines",
+      "Best practices for chatbot design",
+      "Chatbot implementation tips"
+    ],
+    "responses": [
+      "When building chatbots, it's essential to design conversational flows that are intuitive, concise, and context-aware, providing users with clear prompts and feedback.",
+      "Use natural language processing (NLP) to understand user input accurately, handle variations in language, and extract relevant information from messages.",
+      "Incorporate machine learning techniques to continuously improve the chatbot's performance, learn from user interactions, and adapt to changing user needs and preferences.",
+      "Provide users with multiple channels for interacting with the chatbot, including text messaging, voice commands, and graphical interfaces, to accommodate different preferences and accessibility needs.",
+      "Regularly monitor and analyze chatbot performance metrics, such as user engagement, conversation completion rates, and customer satisfaction scores, to identify areas for improvement and optimization."
+    ],
+    "context_set": ""
+  },
+     {
+  "tag": "animal_facts",
+  "patterns": [
+    "Tell me about animals",
+    "Animal facts",
+    "Interesting facts about animals",
+    "Learn about different animals",
+    "Fascinating animals"
+  ],
+  "responses": [
+    "Sure! Did you know that the blue whale is the largest animal on Earth, growing up to 100 feet long and weighing as much as 200 tons?",
+    "Animals are fascinating creatures! For example, a group of flamingos is called a 'flamboyance.'",
+    "There are so many interesting facts about animals! For instance, an octopus has three hearts and blue blood.",
+    "Let me share some cool animal facts with you! Did you know that a giraffe's tongue can be up to 20 inches long and is blue-black in color?",
+    "Animals are incredible beings! Did you know that elephants are the only animals that can't jump?"
+  ],
+  "context_set": ""
+},
+     {
+  "tag": "plant_facts",
+  "patterns": [
+    "Tell me about plants",
+    "Plant facts",
+    "Interesting facts about plants",
+    "Learn about different plants",
+    "Fascinating plants"
+  ],
+  "responses": [
+    "Plants are fascinating! Did you know that the largest flower in the world is the Rafflesia arnoldii, which can grow up to three feet in diameter?",
+    "There are so many interesting facts about plants! For example, the world's oldest living tree is a bristlecone pine named Methuselah, estimated to be over 4,800 years old.",
+    "Let me share some cool plant facts with you! Did you know that the Venus flytrap is a carnivorous plant that catches and digests insects for nutrients?",
+    "Plants have amazing adaptations! For instance, the Welwitschia mirabilis, found in the Namib Desert, can live for over 1,000 years despite receiving little rainfall.",
+    "Plants play a crucial role in our ecosystem! Did you know that bamboo is one of the fastest-growing plants in the world and can grow up to 35 inches in a single day?"
+  ],
+  "context_set": ""
+},
+     {
+    "tag": "jewelry_types",
+    "patterns": [
+      "Types of jewelry",
+      "Different kinds of jewelry",
+      "Varieties of jewelry",
+      "Types of accessories",
+      "Popular jewelry styles"
+    ],
+    "responses": [
+      "There are various types of jewelry, including necklaces, earrings, bracelets, rings, brooches, and anklets, each offering unique styles and designs.",
+      "Different cultures and regions have their own traditional jewelry styles, such as Indian Kundan, Chinese jade, African beaded, and Native American turquoise jewelry.",
+      "Jewelry can be categorized into categories like fine jewelry, fashion jewelry, costume jewelry, antique jewelry, and artisan jewelry, each catering to different tastes and budgets.",
+      "Popular jewelry styles include minimalist, vintage, bohemian, modern, and statement jewelry, each reflecting different fashion trends and personal preferences.",
+      "From classic pearls to contemporary statement pieces, jewelry comes in a wide range of styles, materials, and designs to suit every occasion and individual taste."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "jewelry_materials",
+    "patterns": [
+      "Types of materials used in jewelry",
+      "Common jewelry materials",
+      "Popular metals for jewelry",
+      "Precious gemstones in jewelry",
+      "Traditional jewelry materials"
+    ],
+    "responses": [
+      "Jewelry can be crafted from various materials, including precious metals like gold, silver, platinum, and palladium, as well as non-precious metals like stainless steel, titanium, and brass.",
+      "Gemstones are often used in jewelry for their beauty and rarity, with popular choices including diamonds, rubies, sapphires, emeralds, amethysts, and topazes.",
+      "Other materials commonly used in jewelry making include pearls, coral, jade, opal, turquoise, amber, and various types of beads, shells, and crystals.",
+      "Traditional jewelry materials vary across cultures and regions, with examples such as cowrie shells in African jewelry, turquoise in Native American jewelry, and jade in Chinese jewelry.",
+      "The choice of materials in jewelry making depends on factors such as aesthetics, durability, cost, cultural significance, and personal preferences."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "jewelry_care",
+    "patterns": [
+      "How to care for jewelry",
+      "Jewelry maintenance tips",
+      "Cleaning jewelry",
+      "Preserving jewelry",
+      "Taking care of precious metals"
+    ],
+    "responses": [
+      "To care for jewelry, it's important to store it properly in a clean, dry place away from sunlight and moisture, preferably in a jewelry box or pouch to prevent scratches and tarnishing.",
+      "Regularly clean jewelry using mild soap and warm water, and gently scrub with a soft brush or cloth to remove dirt, oil, and debris, taking care not to damage delicate settings or stones.",
+      "Avoid exposing jewelry to harsh chemicals, perfumes, cosmetics, and household cleaners, as they can damage metals, corrode finishes, and dull gemstones over time.",
+      "Periodically inspect jewelry for loose stones, worn prongs, or damaged settings, and have them repaired by a professional jeweler to prevent further damage or loss.",
+      "For precious metals like gold and silver, consider professional cleaning and polishing services to maintain their luster and shine, and store them separately to prevent scratching."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "jewelry_gifts",
+    "patterns": [
+      "Choosing jewelry as a gift",
+      "Gift ideas for jewelry lovers",
+      "Jewelry gift recommendations",
+      "Choosing the perfect piece of jewelry",
+      "Meaningful jewelry gifts"
+    ],
+    "responses": [
+      "When choosing jewelry as a gift, consider the recipient's personal style, preferences, and lifestyle, and opt for timeless pieces that hold sentimental value and can be worn for years to come.",
+      "Gift ideas for jewelry lovers include birthstone jewelry, personalized pieces with initials or names, symbolic charms or pendants, and matching sets of earrings, necklaces, or bracelets.",
+      "For special occasions like birthdays, anniversaries, graduations, or holidays, consider meaningful jewelry gifts that celebrate milestones, achievements, or shared memories, such as engraved messages or commemorative designs.",
+      "Choosing the perfect piece of jewelry involves considering factors such as the occasion, budget, metal preference, gemstone choice, and design style, and selecting pieces that reflect the recipient's tastes and personality.",
+      "Meaningful jewelry gifts convey thoughtfulness, love, and appreciation, and can include heirloom pieces passed down through generations, custom-designed creations, or symbolic motifs that hold personal significance."
+    ],
+    "context_set": ""
+  },
+ {
+    "tag": "agriculture_intro",
+    "patterns": [
+      "What is agriculture?",
+      "Tell me about agriculture",
+      "What does agriculture involve?",
+      "Define agriculture"
+    ],
+    "responses": [
+      "Agriculture is the practice of cultivating plants, raising animals, and other activities aimed at producing food, fiber, and other products for human use.",
+      "In essence, agriculture encompasses the science, art, and business of cultivating land, raising crops, and rearing livestock.",
+      "Agriculture involves a wide range of activities, including planting, harvesting, animal husbandry, and managing natural resources for sustainable food production."
+    ],
+    "context_set": ""
+  },
+ {
+    "tag": "crop_rotation",
+    "patterns": [
+      "What is crop rotation?",
+      "Explain crop rotation",
+      "How does crop rotation work?",
+      "Benefits of crop rotation"
+    ],
+    "responses": [
+      "Crop rotation is the practice of growing a series of dissimilar or different types of crops in the same area in sequenced seasons.",
+      "It is done so that the soil of farms is not used to only one type of nutrient.",
+      "Crop rotation also mitigates the build-up of pathogens and pests that often occur when one species is continuously cropped, and can also improve soil structure and fertility by alternating deep-rooted and shallow-rooted plants."
+    ],
+    "context_set": ""
+    },
+    {
+    "tag": "irrigation_methods",
+    "patterns": [
+      "What are irrigation methods?",
+      "Explain different irrigation techniques",
+      "How do farmers irrigate their fields?",
+      "Advantages of drip irrigation"
+    ],
+    "responses": [
+      "Irrigation methods refer to the techniques and systems used to supply water to crops.",
+      "Common methods include drip irrigation, sprinkler irrigation, flood irrigation, and pivot irrigation.",
+      "Drip irrigation is advantageous as it delivers water directly to the roots of plants, reducing water waste and evaporation."
+    ],
+    "context_set": ""
+    },
+    {
+    "tag": "sustainable_agriculture",
+    "patterns": [
+      "What is sustainable agriculture?",
+      "How does sustainable farming work?",
+      "Explain the concept of sustainable agriculture",
+      "Why is sustainable agriculture important?"
+    ],
+    "responses": [
+      "Sustainable agriculture is a farming practice that seeks to produce food and resources in a way that is healthy for consumers and animals, does not harm the environment, is humane for workers, respects animals, provides a fair wage to the farmer, and supports and enhances rural communities.",
+      "It aims to maintain the health of ecosystems and preserve natural resources for future generations.",
+      "Key principles of sustainable agriculture include soil conservation, water management, biodiversity preservation, and minimal use of synthetic inputs."
+    ],
+    "context_set": ""
+  },
+   {
+    "tag": "greenhouse_technology",
+    "patterns": [
+      "What is greenhouse technology?",
+      "Explain greenhouse farming",
+      "How do greenhouses work?",
+      "Advantages of greenhouse cultivation"
+    ],
+    "responses": [
+      "Greenhouse technology involves the construction of structures where plants are grown under controlled environmental conditions.",
+      "Greenhouses provide a controlled climate, allowing farmers to extend the growing season, protect crops from adverse weather conditions, and optimize growth conditions for various plants.",
+      "Advantages of greenhouse cultivation include higher crop yields, reduced water usage, protection from pests and diseases, and the ability to grow crops in regions with unfavorable climates."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "organic_farming",
+    "patterns": [
+      "What is organic farming?",
+      "Explain organic agriculture",
+      "How does organic farming differ from conventional farming?",
+      "Benefits of organic farming"
+    ],
+    "responses": [
+      "Organic farming is a method of agriculture that relies on natural processes and materials to produce crops and raise livestock.",
+      "It avoids the use of synthetic fertilizers, pesticides, and genetically modified organisms (GMOs), focusing instead on practices such as crop rotation, composting, and biological pest control.",
+      "Benefits of organic farming include reduced chemical exposure for farmers and consumers, improved soil health, biodiversity conservation, and support for sustainable farming practices."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "precision_agriculture",
+    "patterns": [
+      "What is precision agriculture?",
+      "Explain precision farming",
+      "How does precision agriculture improve efficiency?",
+      "Technologies used in precision farming"
+    ],
+    "responses": [
+      "Precision agriculture involves the use of advanced technologies and data analytics to optimize crop production and resource use.",
+      "It relies on techniques such as GPS guidance systems, drones, sensors, and automated machinery to monitor and manage crops with precision.",
+      "Precision agriculture improves efficiency by enabling farmers to apply inputs such as water, fertilizer, and pesticides more precisely, reducing waste and environmental impact while maximizing yields."
+    ],
+    "context_set": ""
+  }
+
+ ]
+}
