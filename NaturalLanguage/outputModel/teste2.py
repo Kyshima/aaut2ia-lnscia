@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import tensorflow as tf
+from keras.src.layers import Dropout
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Embedding
 from tensorflow.keras.preprocessing.text import Tokenizer
@@ -41,12 +43,19 @@ label_encoder = LabelEncoder()
 y_encoded = label_encoder.fit_transform(y)
 
 model = Sequential([
-    Embedding(max_words, 50),
-    LSTM(128),
+    Embedding(input_dim=len(expanded_df['Leading Words']), output_dim=100),
+    LSTM(50, return_sequences=True),
+    Dropout(0.2),
+    LSTM(125, return_sequences=True),
+    Dropout(0.15),
+    LSTM(200),
+    Dropout(0.1),
     Dense(len(expanded_df['Next Word']), activation='softmax')
 ])
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+model.fit(X, y_encoded, epochs=200, batch_size=128)
 
 def on_epoch_end(model):
         print()
@@ -73,11 +82,6 @@ def on_epoch_end(model):
                 print(generated)
                 if predicted_disease == "EOF":
                     break
-
-
-model.fit(X, y_encoded, epochs=200, batch_size=128)
-
-
 
 on_epoch_end(model)
 

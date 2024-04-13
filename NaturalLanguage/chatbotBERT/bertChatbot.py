@@ -93,7 +93,7 @@ y = list(df2['labels'])
 
 X_train,X_test,y_train,y_test = train_test_split(X,y,random_state = 123)
 
-
+'''
 #BERT Model
 model_name = "bert-base-uncased"
 max_len = 256
@@ -146,19 +146,19 @@ def compute_metrics(pred):
     }
 
 training_args = TrainingArguments(
-    output_dir='./output',
+    output_dir='./output2',
     do_train=True,
     do_eval=True,
-    num_train_epochs=100,
+    num_train_epochs=50,
     per_device_train_batch_size=32,
     per_device_eval_batch_size=16,
     warmup_steps=100,
     weight_decay=0.05,
     logging_strategy='steps',
-    logging_dir='./multi-class-logs',
-    logging_steps=50,
+    logging_dir='./multi-class-logs2',
+    logging_steps=25,
     evaluation_strategy="steps",
-    eval_steps=50,
+    eval_steps=25,
     save_strategy="steps",
     load_best_model_at_end=True
 )
@@ -174,14 +174,47 @@ trainer = Trainer(
 trainer.train()
 
 
-model_path = "chatbot"
+model_path = "chatbot2"
 trainer.save_model(model_path)
 tokenizer.save_pretrained(model_path)
 
+'''
 
+model_path = "chatbot2"
 
 model = BertForSequenceClassification.from_pretrained(model_path)
 tokenizer= BertTokenizerFast.from_pretrained(model_path)
 chatbot= pipeline("sentiment-analysis", model=model, tokenizer=tokenizer)
 
-chatbot("My plant")
+print(chatbot("fuck"))
+
+
+def chat(chatbot):
+    print(
+        "Chatbot: Hi! I am your virtual assistance,Feel free to ask, and I'll do my best to provide you with answers and assistance..")
+    print("Type 'quit' to exit the chat\n\n")
+
+    text = input("User: ").strip().lower()
+
+    while (text != 'quit'):
+
+        score = chatbot(text)[0]['score']
+
+        if score < 0.8:
+            print("Chatbot: Sorry I can't answer that\n\n")
+            text = input("User: ").strip().lower()
+            continue
+
+        label = label2id[chatbot(text)[0]['label']]
+
+        if label == 0:
+            response = "Tratamento maravilha"
+        else:
+            response = random.choice(intents['intents'][label-1]['responses'])
+
+        print(f"Chatbot: {response}\n\n")
+
+        text = input("User: ").strip().lower()
+
+
+chat(chatbot)

@@ -15,3 +15,9 @@ NaturalLanguage/chatbot/data/tagged_posts.tsv
 NaturalLanguage/chatbot/data/crop_dialogue.csv
 NaturalLanguage/chatbotBERT/output
 NaturalLanguage/chatbotBERT/multi-class-logs
+NaturalLanguage/chatbot/chatterbot_corpus
+NaturalLanguage/chatbot/data
+NaturalLanguage/chatbotBERT/multi-class-logs2
+NaturalLanguage/chatbotBERT/output2
+NaturalLanguage/chatbotBERT/chatbot2/model.safetensors
+NaturalLanguage/chatbotBERT/chatbot/model.safetensors

@@ -147,7 +147,7 @@
       "Can we date"
    ],
    "responses": [
-      "I am not program for this, please ask appropriate questions"
+      "I am not programmed for this, please ask appropriate questions"
    ],
    "context_set": ""
 },
@@ -1231,6 +1231,112 @@
       "Meaningful jewelry gifts convey thoughtfulness, love, and appreciation, and can include heirloom pieces passed down through generations, custom-designed creations, or symbolic motifs that hold personal significance."
     ],
     "context_set": ""
+  },
+ {
+    "tag": "agriculture_intro",
+    "patterns": [
+      "What is agriculture?",
+      "Tell me about agriculture",
+      "What does agriculture involve?",
+      "Define agriculture"
+    ],
+    "responses": [
+      "Agriculture is the practice of cultivating plants, raising animals, and other activities aimed at producing food, fiber, and other products for human use.",
+      "In essence, agriculture encompasses the science, art, and business of cultivating land, raising crops, and rearing livestock.",
+      "Agriculture involves a wide range of activities, including planting, harvesting, animal husbandry, and managing natural resources for sustainable food production."
+    ],
+    "context_set": ""
+  },
+ {
+    "tag": "crop_rotation",
+    "patterns": [
+      "What is crop rotation?",
+      "Explain crop rotation",
+      "How does crop rotation work?",
+      "Benefits of crop rotation"
+    ],
+    "responses": [
+      "Crop rotation is the practice of growing a series of dissimilar or different types of crops in the same area in sequenced seasons.",
+      "It is done so that the soil of farms is not used to only one type of nutrient.",
+      "Crop rotation also mitigates the build-up of pathogens and pests that often occur when one species is continuously cropped, and can also improve soil structure and fertility by alternating deep-rooted and shallow-rooted plants."
+    ],
+    "context_set": ""
+    },
+    {
+    "tag": "irrigation_methods",
+    "patterns": [
+      "What are irrigation methods?",
+      "Explain different irrigation techniques",
+      "How do farmers irrigate their fields?",
+      "Advantages of drip irrigation"
+    ],
+    "responses": [
+      "Irrigation methods refer to the techniques and systems used to supply water to crops.",
+      "Common methods include drip irrigation, sprinkler irrigation, flood irrigation, and pivot irrigation.",
+      "Drip irrigation is advantageous as it delivers water directly to the roots of plants, reducing water waste and evaporation."
+    ],
+    "context_set": ""
+    },
+    {
+    "tag": "sustainable_agriculture",
+    "patterns": [
+      "What is sustainable agriculture?",
+      "How does sustainable farming work?",
+      "Explain the concept of sustainable agriculture",
+      "Why is sustainable agriculture important?"
+    ],
+    "responses": [
+      "Sustainable agriculture is a farming practice that seeks to produce food and resources in a way that is healthy for consumers and animals, does not harm the environment, is humane for workers, respects animals, provides a fair wage to the farmer, and supports and enhances rural communities.",
+      "It aims to maintain the health of ecosystems and preserve natural resources for future generations.",
+      "Key principles of sustainable agriculture include soil conservation, water management, biodiversity preservation, and minimal use of synthetic inputs."
+    ],
+    "context_set": ""
+  },
+   {
+    "tag": "greenhouse_technology",
+    "patterns": [
+      "What is greenhouse technology?",
+      "Explain greenhouse farming",
+      "How do greenhouses work?",
+      "Advantages of greenhouse cultivation"
+    ],
+    "responses": [
+      "Greenhouse technology involves the construction of structures where plants are grown under controlled environmental conditions.",
+      "Greenhouses provide a controlled climate, allowing farmers to extend the growing season, protect crops from adverse weather conditions, and optimize growth conditions for various plants.",
+      "Advantages of greenhouse cultivation include higher crop yields, reduced water usage, protection from pests and diseases, and the ability to grow crops in regions with unfavorable climates."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "organic_farming",
+    "patterns": [
+      "What is organic farming?",
+      "Explain organic agriculture",
+      "How does organic farming differ from conventional farming?",
+      "Benefits of organic farming"
+    ],
+    "responses": [
+      "Organic farming is a method of agriculture that relies on natural processes and materials to produce crops and raise livestock.",
+      "It avoids the use of synthetic fertilizers, pesticides, and genetically modified organisms (GMOs), focusing instead on practices such as crop rotation, composting, and biological pest control.",
+      "Benefits of organic farming include reduced chemical exposure for farmers and consumers, improved soil health, biodiversity conservation, and support for sustainable farming practices."
+    ],
+    "context_set": ""
+  },
+  {
+    "tag": "precision_agriculture",
+    "patterns": [
+      "What is precision agriculture?",
+      "Explain precision farming",
+      "How does precision agriculture improve efficiency?",
+      "Technologies used in precision farming"
+    ],
+    "responses": [
+      "Precision agriculture involves the use of advanced technologies and data analytics to optimize crop production and resource use.",
+      "It relies on techniques such as GPS guidance systems, drones, sensors, and automated machinery to monitor and manage crops with precision.",
+      "Precision agriculture improves efficiency by enabling farmers to apply inputs such as water, fertilizer, and pesticides more precisely, reducing waste and environmental impact while maximizing yields."
+    ],
+    "context_set": ""
   }
-   ]
+
+ ]
 }
