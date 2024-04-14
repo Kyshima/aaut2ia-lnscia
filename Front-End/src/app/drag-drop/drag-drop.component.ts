@@ -20,8 +20,9 @@ export class DragDropComponent {
   public imageUrl: string = '';
   public fileName: string = '';
   public flag: boolean = true;
-  public image_array : number[][] = [];
-  public answer: string = ''
+  public image : File|null = null;
+  public formData: FormData = new FormData();
+  public answer: String = '';
   public dropped(files: NgxFileDropEntry[],index:number) {
     if (files[0].fileEntry.isFile && this.isFileAllowed(files[0].fileEntry.name)) {
       const fileEntry = files[0].fileEntry as FileSystemFileEntry;
@@ -36,31 +37,7 @@ export class DragDropComponent {
 
   private readImageFile(fileEntry: FileSystemFileEntry): void {
     fileEntry.file((file: File) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(img, 0, 0);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const pixels = imageData.data;
-            const rgbArray = [];
-            for (let i = 0; i < pixels.length; i += 4) {
-              const red = pixels[i];
-              const green = pixels[i + 1];
-              const blue = pixels[i + 2];
-              rgbArray.push([red, green, blue]);
-            }
-            this.image_array = rgbArray;
-          }
-        };
-        img.src = reader.result as string;
-      };
-      reader.readAsDataURL(file);
+      this.image = file
     });
   }
 
@@ -88,16 +65,20 @@ export class DragDropComponent {
   public deleteFile(index:number){
     this.flag=true;
     this.imageUrl = "";
+    this.image = null;
   }
 
   compareFilesJcu(type: number) {
-    if (this.image_array.length == 0) return;
+    if (this.image == null)
+      return;
 
-    const requestBody = {
-      image: this.image_array,
-      type: type
-    };
-    this.http.post<any>('http://127.0.0.1:5000/image-crop-predict', requestBody)
+
+    this.formData = new FormData();
+    // @ts-ignore
+    this.formData.append('file', this.image);
+    this.formData.append('type', type.toString());
+
+    this.http.post<any>('http://127.0.0.1:5000/image-crop-predict', this.formData)
       .subscribe(response => {
         this.answer = response.crop.replace('___', ' - ').replace('_', ' ')
       }, error => {

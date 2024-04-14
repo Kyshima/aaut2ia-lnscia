@@ -103,10 +103,9 @@ if __name__ == "__main__":
 
 
 def load_image(image):
-    image = Image.fromarray(np.array(image))
-    image = image.convert('RGB')
     image = image.resize((128, 128))
     image_array = np.array(image)
+
     color_enhancer = ImageEnhance.Color(image)
     image = color_enhancer.enhance(10)
 
@@ -123,13 +122,13 @@ def load_image(image):
     return image_array
 
 def predict_crop(image, type):
-    if(type == 1):
+    if(type == "1"):
         model_path = "models/crop2.h5"
         label_encoder_path = "models/label_encoder_crop.pkl"
-    if(type == 2):
+    if(type == "2"):
         model_path = "models/illness3.h5"
         label_encoder_path = "models/label_encoder_illness.pkl"
-    if (type == 3):
+    if (type == "3"):
         model_path = "models/crop_illness2.h5"
         label_encoder_path = "models/label_encoder_crop_illness.pkl"
 
