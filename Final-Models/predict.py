@@ -131,7 +131,7 @@ def predict_crop(image, type):
         label_encoder_path = "models/label_encoder_illness.pkl"
     if (type == 3):
         model_path = "models/crop_illness2.h5"
-        label_encoder_path = "models/label_encoder_crop_illness.pkl.pkl"
+        label_encoder_path = "models/label_encoder_crop_illness.pkl"
 
     model = tf.keras.models.load_model(model_path)
     label_encoder = pickle.load(open(label_encoder_path, "rb"))

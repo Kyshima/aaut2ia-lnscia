@@ -19,7 +19,7 @@ def get_image_prediction():
     data = request.get_json()
 
     image = data.get('image')
-    type = 1
+    type = data.get('type')
     crop = predict_crop(image, type)
 
     return jsonify({'crop': crop})
