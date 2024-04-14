@@ -1,3 +1,5 @@
+import cv2
+
 from utils import *
 import tensorflow as tf
 import numpy as np
@@ -103,11 +105,10 @@ if __name__ == "__main__":
 
 
 def load_image(image):
-    image = image.resize((128, 128))
-    image_array = np.array(image)
-
     color_enhancer = ImageEnhance.Color(image)
     image = color_enhancer.enhance(10)
+
+    image = image.convert("RGB")
 
     r, g, b = image.split()
 
@@ -116,9 +117,16 @@ def load_image(image):
 
     image = Image.merge("RGB", (r, g_less_strong, b))
 
-    image_array = np.array(image)
+    open_cv_image = np.array(image.convert('RGB'))
+    # Convert RGB to BGR
+    image_array = open_cv_image[:, :, ::-1].copy()
+    image_array = cv2.resize(image_array, (128, 128))
+    image_array = image_array.reshape(-1, 3)
+    image_array = image_array.reshape(128, 128, 3)
     image_array = image_array / 255.0
+
     image_array = np.expand_dims(image_array, axis=0)
+    print(image_array)
     return image_array
 
 def predict_crop(image, type):
