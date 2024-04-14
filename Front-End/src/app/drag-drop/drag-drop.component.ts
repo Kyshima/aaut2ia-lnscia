@@ -23,6 +23,7 @@ export class DragDropComponent {
   public image : File|null = null;
   public formData: FormData = new FormData();
   public answer: String = '';
+  public fileUrl: string = '';
   public dropped(files: NgxFileDropEntry[],index:number) {
     if (files[0].fileEntry.isFile && this.isFileAllowed(files[0].fileEntry.name)) {
       const fileEntry = files[0].fileEntry as FileSystemFileEntry;
@@ -36,8 +37,14 @@ export class DragDropComponent {
   }
 
   private readImageFile(fileEntry: FileSystemFileEntry): void {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.fileUrl = e.target.result;
+    };
+
     fileEntry.file((file: File) => {
-      this.image = file
+      this.image = file;
+      reader.readAsDataURL(file);
     });
   }
 
@@ -84,5 +91,6 @@ export class DragDropComponent {
       }, error => {
         console.error('Error sending message:', error);
       });
+
   }
 }

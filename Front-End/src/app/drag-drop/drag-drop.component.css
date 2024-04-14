@@ -19,7 +19,7 @@ text-align: center;
 
 .center-panel {
     padding: 10px;
-    height: 20rem;
+    height: 150px;
     width: 50%;
     text-align: center;
 }
@@ -59,7 +59,7 @@ text-align: center;
   body.show-chatbot .chatbot-toggler span:last-child {
     opacity: 1;
   }
-  
+
   body.show-chatbot .chatbot {
     opacity: 1;
     pointer-events: auto;
@@ -169,7 +169,7 @@ text-align: center;
     align-items: center;
     font-size: 1.35rem;
   }
-  
+
   @media (max-width: 490px) {
     .chatbot-toggler {
       right: 20px;

@@ -36,7 +36,7 @@
   body.show-chatbot .chatbot-toggler span:last-child {
     opacity: 1;
   }
-  
+
   body.show-chatbot .chatbot {
     opacity: 1;
     pointer-events: auto;
@@ -146,7 +146,7 @@
     align-items: center;
     font-size: 1.35rem;
   }
-  
+
   @media (max-width: 490px) {
     .chatbot-toggler {
       right: 20px;
@@ -170,3 +170,5 @@
       display: block;
     }
   }
+
+

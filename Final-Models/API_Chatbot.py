@@ -87,7 +87,34 @@ def chat_endpoint():
 
         if response_treatment.status_code == 200:
             result = response_treatment.json()
-            response = result['treatment']
+
+            disease = ''
+            if result['disease'] == 'cornleafblight':
+                disease = 'Corn - Leaf Blight'
+            elif result['disease'] == 'corncommonrust':
+                disease = 'Corn - Common Rust'
+            elif result['disease'] == 'corngrayleafspot':
+                disease = 'Corn - Gray Leaf Spot'
+            elif result['disease'] == 'cornleafblight':
+                disease = 'Corn - Leaf Blight'
+            elif result['disease'] == 'potatoearlyblight':
+                disease = 'Potato - Early Blight'
+            elif result['disease'] == 'potatolateblight':
+                disease = 'Potato - Late Blight'
+            elif result['disease'] == 'ricebrownspot':
+                disease = 'Rice - Brown Spot'
+            elif result['disease'] == 'ricehispa':
+                disease = 'Rice - Hispa'
+            elif result['disease'] == 'riceleafblast':
+                disease = 'Rice - Leaf Blast'
+            elif result['disease'] == 'wheatbrownrust':
+                disease = 'Wheat - Brown Rust'
+            elif result['disease'] == 'wheatyellowrust':
+                disease = 'Wheat - Yellow Rust'
+
+            disease_treatment = disease + ': ' + result['treatment']
+
+            response = disease_treatment
         else:
             print('Failed to retrieve prediction')
 

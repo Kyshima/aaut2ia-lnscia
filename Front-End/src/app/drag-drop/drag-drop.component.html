@@ -4,7 +4,7 @@
   </h2>
 </div>
 
-<div class="panel helvetica">
+<div class="panel helvetica" >
   <div class="center-panel">
     <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event,0)" dropZoneClassName="filedropZone"
       contentClassName="filedropContent">
@@ -13,7 +13,7 @@
           <p>Drag a crop image (jpg)</p>
           <button type="button" class="btn-outline-secondary btn" (click)="openFileSelector()">Search</button>
         </div>
-        <div *ngIf="flag==false" class="file-droped">
+        <div *ngIf="flag==false" class="file-droped" >
           <p>{{ fileName }}</p>
           <button type="button" class="btn-primary btn" (click)="deleteFile(0)">Delete</button>
         </div>
@@ -27,18 +27,20 @@
   <button class="btn-primary btn btn-lg" style="font-size: 100%;margin: 15px;" (click)="compareFilesJcu(3)">Get Crop & Illness</button>
 </div>
 
-<img *ngIf="imageUrl" [src]="imageUrl" alt="Uploaded Image">
-<div class="chatbot" *ngIf="answer != ''">
+
+<div class="chatbot" >
   <ul class="chatbox">
     <li style="list-style-type: none">
-      <div class="chat" class="chat incoming">
+      <div class="chat" class="chat outgoing" *ngIf="this.fileUrl">
+        <p><img  [src]="this.fileUrl" alt="Uploaded Image"></p>
+      </div>
+      <div class="chat" class="chat incoming" *ngIf="answer != ''">
         <span class="material-symbols-outlined"><i class="fa-solid fa-robot"></i></span>
         <p>{{answer}}</p>
       </div>
     </li>
   </ul>
 </div>
-<h1 style="display:flex; justify-content: center" *ngIf="answer != ''">{{answer}}</h1>
 
 <div class="modal-wrapper" *ngIf="showError==true">
   <section class="modal" #modal>
@@ -56,3 +58,25 @@
   </section>
   <div class="modal-overlay" #overlay (click)="CloseModal()"></div>
 </div>
+
+<script>
+  function resizeImageToDiv(imageSelector, divSelector) {
+    var img = document.querySelector(imageSelector);
+    var div = document.querySelector(divSelector);
+
+    var imgWidth = img.width;
+    var imgHeight = img.height;
+
+    var divWidth = div.clientWidth;
+    var divHeight = div.clientHeight;
+
+    var widthRatio = divWidth / imgWidth;
+    var heightRatio = divHeight / imgHeight;
+
+    var minRatio = Math.min(widthRatio, heightRatio);
+
+    img.style.width = imgWidth * minRatio + 'px';
+    img.style.height = imgHeight * minRatio + 'px';
+  }
+
+</script>
